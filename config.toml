@@ -1,0 +1,20 @@
+title = "depmap-omics-rna config"
+
+gcp_project_id = "depmap-omics"
+gumbo_env = "prod"
+uuid_namespace = "00000000-0000-0000-0000-000000000000"
+dry_run = true
+
+[terra]
+repo_namespace = "cds-pipelines"
+workspace_namespace = "broad-firecloud-ccle"
+workspace_name = "depmap-omics-rna"
+
+[terra.align_rna_sample]
+method_namespace = "cds-pipelines"
+method_name = "align_rna_sample"
+method_config_namespace = "cds-pipelines"
+method_config_name = "align_rna_sample"
+method_synopsis = "Align a single RNA sample using STAR"
+workflow_wdl_path = "./workflows/align_rna_sample/align_rna_sample.wdl"
+method_config_json_path = "./workflows/align_rna_sample/align_rna_sample.json"

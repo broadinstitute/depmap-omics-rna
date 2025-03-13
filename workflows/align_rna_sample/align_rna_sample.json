@@ -1,0 +1,26 @@
+{
+  "deleted": false,
+  "inputs": {
+    "align_rna_sample.align_with_star.docker_image": "\"us-docker.pkg.dev/depmap-omics/public/todo\"",
+    "align_rna_sample.align_with_star.docker_image_hash_or_tag": "\"@todo\"",
+    "align_rna_sample.cram_bam": "this.delivery_cram_bam",
+    "align_rna_sample.input_type": "this.input_type",
+    "align_rna_sample.sample_id": "this.sample_id",
+    "align_rna_sample.star_index": "\"gs://ccleparams/STAR_index_hg38_with_viral.tar.gz\""
+  },
+  "methodConfigVersion": 1,
+  "methodRepoMethod": {
+    "methodNamespace": "cds-pipelines",
+    "methodName": "align_rna_sample",
+    "methodVersion": 1
+  },
+  "namespace": "cds-pipelines",
+  "name": "align_rna_sample",
+  "outputs": {
+    "align_rna_sample.analysis_ready_bai": "this.analysis_ready_bai",
+    "align_rna_sample.analysis_ready_bam": "this.analysis_ready_bam",
+    "align_rna_sample.reads_per_gene": "this.reads_per_gene",
+    "align_rna_sample.transcriptome_bam": "this.transcriptome_bam"
+  },
+  "rootEntityType": "sample"
+}

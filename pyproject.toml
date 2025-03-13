@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "depmap-omics-rna"
+version = "0.1.0"
+description = ""
+authors = []
+readme = "README.md"
+packages = [{include = "depmap_omics_rna"}]
+include = ["gumbo_gql_client"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+ariadne-codegen = "^0.13.0"
+pandas = "^2.2.3"
+pandera = {extras = ["strategies"], version = "^0.20.4"}
+python-dotenv = "^1.0.1"
+pydantic = "^2.10.6"
+google-cloud-storage = "^2.19.0"
+google-cloud-logging = "^3.11.4"
+functions-framework = "^3.8.2"
+typer = "^0.9.4"
+pygithub = "^2.6.1"
+nebelung = "^2.3.0"
+pd-flatten = "^0.1.1"
+google-cloud-secret-manager = "^2.23.1"
+
+[tool.poetry.group.dev.dependencies]
+pyarrow = "^15.0.2"
+ruff = "^0.4.10"
+pyright = "^1.1.396"
+
+[[tool.poetry.source]]
+name = "public-python"
+url = "https://us-central1-python.pkg.dev/cds-artifacts/public-python/simple/"
+priority = "supplemental"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = [
+    "I",  # isort formatting
+]
+extend-include = ["*.ipynb"]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["depmap_omics_rna", "main.py"]
+reportInvalidTypeVarUse = "none"
