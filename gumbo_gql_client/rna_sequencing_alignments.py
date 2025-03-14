@@ -10,6 +10,7 @@ class RnaSequencingAlignments(BaseModel):
 class RnaSequencingAlignmentsRecords(BaseModel):
     index_url: Optional[str]
     omics_sequencing_id: str
+    reference_genome: Optional[str]
     sequencing_alignment_source: str
     url: str
 

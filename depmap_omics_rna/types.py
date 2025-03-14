@@ -26,6 +26,7 @@ class GumboClient(AriadneGumboClient):
 class GumboAlignment(CoercedDataFrame):
     omics_sequencing_id: Series[pd.StringDtype]
     sequencing_alignment_source: Series[pd.StringDtype] = pa.Field(isin=["GP", "CDS"])
+    reference_genome: Series[pd.StringDtype]
     url: Series[pd.StringDtype] = pa.Field(unique=True)
     index_url: Series[pd.StringDtype] = pa.Field(unique=True)
 

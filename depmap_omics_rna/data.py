@@ -38,7 +38,7 @@ def do_refresh_terra_samples(
     # make wide, separating delivery and analysis-ready CRAM/BAMs
     samples = (
         alignments.loc[alignments["sequencing_alignment_source"].eq("GP")]
-        .drop(columns="sequencing_alignment_source")
+        .drop(columns=["sequencing_alignment_source", "reference_genome"])
         .rename(
             columns={
                 "omics_sequencing_id": "sample_id",
@@ -48,12 +48,32 @@ def do_refresh_terra_samples(
             }
         )
         .merge(
-            alignments.loc[alignments["sequencing_alignment_source"].eq("CDS")]
-            .drop(columns="sequencing_alignment_source")
+            alignments.loc[
+                alignments["sequencing_alignment_source"].eq("CDS")
+                & alignments["reference_genome"].eq("hg38")
+            ]
+            .drop(columns=["sequencing_alignment_source", "reference_genome"])
             .rename(
                 columns={
                     "omics_sequencing_id": "sample_id",
-                    "sequencing_alignment_id": "aligned_sequencing_alignment_id",
+                    "sequencing_alignment_id": "old_analysis_ready_sequencing_alignment_id",
+                    "url": "old_analysis_ready_bam",
+                    "index_url": "old_analysis_ready_bai",
+                }
+            ),
+            how="outer",
+            on="sample_id",
+        )
+        .merge(
+            alignments.loc[
+                alignments["sequencing_alignment_source"].eq("CDS")
+                & alignments["reference_genome"].eq("hg38_w_viral")
+            ]
+            .drop(columns=["sequencing_alignment_source", "reference_genome"])
+            .rename(
+                columns={
+                    "omics_sequencing_id": "sample_id",
+                    "sequencing_alignment_id": "analysis_ready_sequencing_alignment_id",
                     "url": "analysis_ready_bam",
                     "index_url": "analysis_ready_bai",
                 }
@@ -63,21 +83,30 @@ def do_refresh_terra_samples(
         )
     )
 
+    samples["delivery_crai_bai"] = samples["delivery_crai_bai"].fillna(
+        samples["old_analysis_ready_bai"]
+    )
+    samples["delivery_cram_bam"] = samples["delivery_cram_bam"].fillna(
+        samples["old_analysis_ready_bam"]
+    )
+
     samples["delivery_file_format"] = (
         samples["delivery_cram_bam"].str.rsplit(".", n=1).str.get(1).str.upper()
     )
 
     # validate types
-    samples = type_data_frame(samples, TerraSample)
+    samples = type_data_frame(samples, TerraSample, remove_unknown_cols=True)
 
     # delete obsolete samples (e.g. ones that have been blacklisted since the last sync)
     terra_samples = terra_workspace.get_entities("sample")
-    terra_workspace.delete_entities(
-        entity_type="sample",
-        entity_ids=set(terra_samples["sample_id"]).difference(
-            set(samples["sample_id"])
-        ),
-    )
+
+    if len(terra_samples) > 0:
+        terra_workspace.delete_entities(
+            entity_type="sample",
+            entity_ids=set(terra_samples["sample_id"]).difference(
+                set(samples["sample_id"])
+            ),
+        )
 
     sample_ids = samples.pop("sample_id")
     samples.insert(0, "entity:sample_id", sample_ids)

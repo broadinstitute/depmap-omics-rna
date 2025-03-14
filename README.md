@@ -10,7 +10,7 @@ This repository contains WDL workflows and a Python module to continuously run w
     - [Poetry](https://python-poetry.org/)
     - [pre-commit](https://pre-commit.com/)
 
-2. Install the required Python version (3.12.1):
+2. Install the required Python version (3.12.3):
 
    ```bash
    pyenv install "$(cat .python-version)"

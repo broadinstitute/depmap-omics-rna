@@ -46,6 +46,7 @@ class GumboClient(BaseClient):
               ) {
                 index_url
                 omics_sequencing_id
+                reference_genome
                 sequencing_alignment_source
                 url
               }
