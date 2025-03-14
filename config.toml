@@ -18,3 +18,12 @@ method_config_name = "align_rna_sample"
 method_synopsis = "Align a single RNA sample using STAR"
 workflow_wdl_path = "./workflows/align_rna_sample/align_rna_sample.wdl"
 method_config_json_path = "./workflows/align_rna_sample/align_rna_sample.json"
+
+[terra.call_sr_rna_fusions]
+method_namespace = "cds-pipelines"
+method_name = "call_sr_rna_fusions"
+method_config_namespace = "cds-pipelines"
+method_config_name = "call_sr_rna_fusions"
+method_synopsis = "Call short read RNA fusions with Arriba"
+workflow_wdl_path = "./workflows/call_sr_rna_fusions/call_sr_rna_fusions.wdl"
+method_config_json_path = "./workflows/call_sr_rna_fusions/call_sr_rna_fusions.json"

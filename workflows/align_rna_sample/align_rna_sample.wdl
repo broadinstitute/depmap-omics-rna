@@ -122,8 +122,10 @@ task align_with_star {
 
         echo "Done with STAR"
 
-        mv "star_out/~{sample_id}.{Aligned.out.bam,analysis_ready}.bai"
-        mv "star_out/~{sample_id}.{Aligned.out,analysis_ready}.bam"
+        mv "star_out/~{sample_id}.Aligned.out.bam.bai" \
+            "star_out/~{sample_id}.analysis_ready.bai"
+        mv "star_out/~{sample_id}.Aligned.out.bam" \
+            "star_out/~{sample_id}.analysis_ready.bam"
     >>>
 
     output {

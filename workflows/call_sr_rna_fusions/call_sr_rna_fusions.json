@@ -1,0 +1,24 @@
+{
+  "deleted": false,
+  "inputs": {
+    "call_sr_rna_fusions.analysis_ready_bam": "this.analysis_ready_bam",
+    "call_sr_rna_fusions.call_fusions_with_arriba.docker_image": "\"us-docker.pkg.dev/depmap-omics/public/star_arriba\"",
+    "call_sr_rna_fusions.call_fusions_with_arriba.docker_image_hash_or_tag": "\"@sha256:bafa338583b54f8fe8e5a6ff05ec9fad2c5f0a5b6d5393608bbd1130157cc042\"",
+    "call_sr_rna_fusions.gtf": "\"gs://ccleparams/rna/gencode.v38_with_viral_corrected.gtf\"",
+    "call_sr_rna_fusions.ref_fasta": "\"gs://ccleparams/rna/Homo_sapiens_assembly38_with_viral.fa\"",
+    "call_sr_rna_fusions.sample_id": "this.sample_id"
+  },
+  "methodConfigVersion": 1,
+  "methodRepoMethod": {
+    "methodNamespace": "cds-pipelines",
+    "methodName": "call_sr_rna_fusions",
+    "methodVersion": 1
+  },
+  "namespace": "cds-pipelines",
+  "name": "call_sr_rna_fusions",
+  "outputs": {
+    "call_sr_rna_fusions.fusions": "this.fusions",
+    "call_sr_rna_fusions.fusions_discarded": "this.fusions_discarded"
+  },
+  "rootEntityType": "sample"
+}
