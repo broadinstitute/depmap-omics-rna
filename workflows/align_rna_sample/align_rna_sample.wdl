@@ -6,7 +6,7 @@ workflow align_rna_sample {
         String workflow_source_url # populated automatically with URL of this script
 
         String sample_id
-        String input_type
+        String cram_or_bam
         File cram_bam
         File star_index
     }
@@ -14,7 +14,7 @@ workflow align_rna_sample {
     call align_with_star {
         input:
             sample_id = sample_id,
-            input_type = input_type,
+            cram_or_bam = cram_or_bam,
             cram_bam = cram_bam,
             star_index = star_index
     }
@@ -31,7 +31,7 @@ task align_with_star {
     input {
         String sample_id
         File cram_bam
-        String input_type
+        String cram_or_bam
         File star_index
 
         String docker_image
@@ -43,7 +43,7 @@ task align_with_star {
         Int additional_mem_gb = 0
     }
 
-    Int bam_size_gb = if input_type == "BAM" then (
+    Float bam_size_gb = if cram_or_bam == "BAM" then (
         size(cram_bam, "GiB")
     ) else 2 * size(cram_bam, "GiB")
 
@@ -96,7 +96,7 @@ task align_with_star {
             --genomeLoad NoSharedMemory \
             --limitBAMsortRAM ~{bam_sort_ram_bytes} \
             --limitSjdbInsertNsj 1200000 \
-            --outFileNamePrefix "~{sample_id}." \
+            --outFileNamePrefix "./star_out/~{sample_id}." \
             --outFilterIntronMotifs None \
             --outFilterMatchNmin 0 \
             --outFilterMatchNminOverLread 0.33 \
@@ -109,9 +109,8 @@ task align_with_star {
             --outSAMattrRGline ID:GRPundef \
             --outSAMattributes NH HI AS nM NM ch \
             --outSAMstrandField intronMotif \
-            --outSAMtype BAM SortedByCoordinate \
+            --outSAMtype BAM Unsorted \
             --outSAMunmapped Within \
-            --output_dir "star_out" \
             --peOverlapMMp 0.1 \
             --peOverlapNbasesMin 12 \
             --quantMode TranscriptomeSAM GeneCounts \
@@ -123,8 +122,8 @@ task align_with_star {
 
         echo "Done with STAR"
 
-        mv "star_out/~{sample_id}.{Aligned.sortedByCoord.out.bam,analysis_ready}.bai"
-        mv "star_out/~{sample_id}.{Aligned.sortedByCoord.out,analysis_ready}.bam"
+        mv "star_out/~{sample_id}.{Aligned.out.bam,analysis_ready}.bai"
+        mv "star_out/~{sample_id}.{Aligned.out,analysis_ready}.bam"
     >>>
 
     output {
