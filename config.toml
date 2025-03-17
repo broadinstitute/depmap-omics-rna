@@ -27,3 +27,12 @@ method_config_name = "call_sr_rna_fusions"
 method_synopsis = "Call short read RNA fusions with Arriba"
 workflow_wdl_path = "./workflows/call_sr_rna_fusions/call_sr_rna_fusions.wdl"
 method_config_json_path = "./workflows/call_sr_rna_fusions/call_sr_rna_fusions.json"
+
+[terra.quantify_sr_rna]
+method_namespace = "cds-pipelines"
+method_name = "quantify_sr_rna"
+method_config_namespace = "cds-pipelines"
+method_config_name = "quantify_sr_rna"
+method_synopsis = "Quantify short read RNA fusions with Salmon"
+workflow_wdl_path = "./workflows/quantify_sr_rna/quantify_sr_rna.wdl"
+method_config_json_path = "./workflows/quantify_sr_rna/quantify_sr_rna.json"
