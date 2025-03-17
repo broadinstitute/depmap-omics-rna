@@ -73,8 +73,6 @@ task align_with_star {
             -1 "~{sample_id}.1.fq.gz" \
             -2 "~{sample_id}.2.fq.gz" -
 
-        mkdir -p "star_out"
-
         echo "Running STAR"
         STAR \
             --alignInsertionFlush Right \
@@ -96,7 +94,7 @@ task align_with_star {
             --genomeLoad NoSharedMemory \
             --limitBAMsortRAM ~{bam_sort_ram_bytes} \
             --limitSjdbInsertNsj 1200000 \
-            --outFileNamePrefix "./star_out/~{sample_id}." \
+            --outFileNamePrefix "~{sample_id}." \
             --outFilterIntronMotifs None \
             --outFilterMatchNmin 0 \
             --outFilterMatchNminOverLread 0.33 \
@@ -120,19 +118,24 @@ task align_with_star {
             --twopassMode None \
             --winAnchorMultimapNmax 50
 
-        echo "Done with STAR"
+        echo "Sorting and indexing aligned BAM"
+        samtools sort \
+            -@ ~{n_threads} \
+            "~{sample_id}.Aligned.out.bam" \
+            > "~{sample_id}.analysis_ready.bam"
 
-        mv "star_out/~{sample_id}.Aligned.out.bam.bai" \
-            "star_out/~{sample_id}.analysis_ready.bai"
-        mv "star_out/~{sample_id}.Aligned.out.bam" \
-            "star_out/~{sample_id}.analysis_ready.bam"
+        samtools index \
+            -b \
+            -@ ~{n_threads} \
+            "~{sample_id}.analysis_ready.bam" \
+            "~{sample_id}.analysis_ready.bai"
     >>>
 
     output {
-        File analysis_ready_bai = "star_out/~{sample_id}.analysis_ready.bai"
-        File analysis_ready_bam = "star_out/~{sample_id}.analysis_ready.bam"
-        File reads_per_gene = "star_out/~{sample_id}.ReadsPerGene.out.tab"
-        File transcriptome_bam = "star_out/~{sample_id}.Aligned.toTranscriptome.out.bam"
+        File analysis_ready_bai = "~{sample_id}.analysis_ready.bai"
+        File analysis_ready_bam = "~{sample_id}.analysis_ready.bam"
+        File reads_per_gene = "~{sample_id}.ReadsPerGene.out.tab"
+        File transcriptome_bam = "~{sample_id}.Aligned.toTranscriptome.out.bam"
     }
 
     runtime {
