@@ -17,7 +17,6 @@
   "namespace": "cds-pipelines",
   "name": "align_rna_sample",
   "outputs": {
-    "align_rna_sample.analysis_ready_bai": "this.analysis_ready_bai",
     "align_rna_sample.analysis_ready_bam": "this.analysis_ready_bam",
     "align_rna_sample.reads_per_gene": "this.reads_per_gene",
     "align_rna_sample.transcriptome_bam": "this.transcriptome_bam"

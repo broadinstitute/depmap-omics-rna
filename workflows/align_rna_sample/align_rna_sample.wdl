@@ -22,7 +22,6 @@ workflow align_rna_sample {
     output {
         File transcriptome_bam = align_with_star.transcriptome_bam
         File analysis_ready_bam = align_with_star.analysis_ready_bam
-        File analysis_ready_bai = align_with_star.analysis_ready_bai
         File reads_per_gene = align_with_star.reads_per_gene
     }
 }
@@ -55,7 +54,6 @@ task align_with_star {
     Int n_threads = cpu - 1
 
     Int mem_gb = ceil(20 * bam_size_gb) + additional_mem_gb
-    Int bam_sort_ram_bytes = ceil(mem_gb * 1000 * 1000 * 1000 * 0.85)
 
     command <<<
         set -euo pipefail
@@ -92,7 +90,6 @@ task align_with_star {
             --chimSegmentMin 12 \
             --genomeDir star_index \
             --genomeLoad NoSharedMemory \
-            --limitBAMsortRAM ~{bam_sort_ram_bytes} \
             --limitSjdbInsertNsj 1200000 \
             --outFileNamePrefix "~{sample_id}." \
             --outFilterIntronMotifs None \
@@ -117,23 +114,10 @@ task align_with_star {
             --runThreadN ~{n_threads} \
             --twopassMode None \
             --winAnchorMultimapNmax 50
-
-        echo "Sorting and indexing aligned BAM"
-        samtools sort \
-            -@ ~{n_threads} \
-            "~{sample_id}.Aligned.out.bam" \
-            > "~{sample_id}.analysis_ready.bam"
-
-        samtools index \
-            -b \
-            -@ ~{n_threads} \
-            "~{sample_id}.analysis_ready.bam" \
-            "~{sample_id}.analysis_ready.bai"
     >>>
 
     output {
-        File analysis_ready_bai = "~{sample_id}.analysis_ready.bai"
-        File analysis_ready_bam = "~{sample_id}.analysis_ready.bam"
+        File analysis_ready_bam = "~{sample_id}.Aligned.out.bam"
         File reads_per_gene = "~{sample_id}.ReadsPerGene.out.tab"
         File transcriptome_bam = "~{sample_id}.Aligned.toTranscriptome.out.bam"
     }
