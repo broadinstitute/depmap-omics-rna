@@ -58,24 +58,6 @@ def do_refresh_terra_samples(
                     "omics_sequencing_id": "sample_id",
                     "sequencing_alignment_id": "old_analysis_ready_sequencing_alignment_id",
                     "url": "old_analysis_ready_bam",
-                    "index_url": "old_analysis_ready_bai",
-                }
-            ),
-            how="outer",
-            on="sample_id",
-        )
-        .merge(
-            alignments.loc[
-                alignments["sequencing_alignment_source"].eq("CDS")
-                & alignments["reference_genome"].eq("hg38_w_viral")
-            ]
-            .drop(columns=["sequencing_alignment_source", "reference_genome"])
-            .rename(
-                columns={
-                    "omics_sequencing_id": "sample_id",
-                    "sequencing_alignment_id": "analysis_ready_sequencing_alignment_id",
-                    "url": "analysis_ready_bam",
-                    "index_url": "analysis_ready_bai",
                 }
             ),
             how="outer",
@@ -83,9 +65,6 @@ def do_refresh_terra_samples(
         )
     )
 
-    samples["delivery_crai_bai"] = samples["delivery_crai_bai"].fillna(
-        samples["old_analysis_ready_bai"]
-    )
     samples["delivery_cram_bam"] = samples["delivery_cram_bam"].fillna(
         samples["old_analysis_ready_bam"]
     )

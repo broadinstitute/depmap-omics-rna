@@ -38,8 +38,6 @@ class TerraSample(CoercedDataFrame):
     delivery_file_format: Series[pd.StringDtype] = pa.Field(
         isin={"CRAM", "BAM"}, nullable=True
     )
-    analysis_ready_bam: Series[pd.StringDtype] = pa.Field(nullable=True)
-    analysis_ready_bai: Series[pd.StringDtype] = pa.Field(nullable=True)
 
 
 class GumboTaskEntity(CoercedDataFrame):
