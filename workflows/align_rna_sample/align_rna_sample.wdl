@@ -8,7 +8,7 @@ workflow align_rna_sample {
         String sample_id
         String cram_or_bam
         File cram_bam
-        File crai_bai
+        File? crai_bai
         File? ref_fasta
         File? ref_fasta_index
         File star_index

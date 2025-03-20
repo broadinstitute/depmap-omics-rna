@@ -38,21 +38,9 @@ workflow_wdl_path = "./workflows/quantify_sr_rna/quantify_sr_rna.wdl"
 method_config_json_path = "./workflows/quantify_sr_rna/quantify_sr_rna.json"
 
 [ref.hg19]
-ref_amb = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta.amb"
-ref_ann = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta.ann"
-ref_bwt = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta.bwt"
-ref_dict = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.dict"
 ref_fasta = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta"
 ref_fasta_index = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta.fai"
-ref_pac = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta.pac"
-ref_sa = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta.sa"
 
 [ref.hg38]
-ref_amb = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.fasta.amb"
-ref_ann = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.fasta.ann"
-ref_bwt = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.fasta.bwt"
-ref_dict = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.dict"
-ref_fasta = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.fasta"
-ref_fasta_index = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.fasta.fai"
-ref_pac = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.fasta.pac"
-ref_sa = "gs://ccleparams/hg38ref/Homo_sapiens_assembly38.fasta.sa"
+ref_fasta = "gs://ccleparams/hg38.DRAGEN_GP_CRAM.fa"
+ref_fasta_index = "gs://ccleparams/hg38.DRAGEN_GP_CRAM.fa.fai"

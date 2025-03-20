@@ -122,7 +122,7 @@ def set_ref_urls(
     """
 
     # join reference URLs to for `delivery_` and `analysis_ready_` CRAM/BAMs
-    ref_df = pd.DataFrame(ref_urls.values())[["ref_fasta", "ref_fasta_index"]]
+    ref_df = pd.DataFrame(ref_urls.values())
     ref_df["ref"] = ref_urls.keys()
     ref_df.columns = "delivery_" + ref_df.columns
 
