@@ -96,7 +96,9 @@ def update_workflow(
 @app.command()
 def refresh_terra_samples(ctx: typer.Context) -> None:
     do_refresh_terra_samples(
-        terra_workspace=ctx.obj["terra_workspace"], gumbo_client=ctx.obj["gumbo_client"]
+        terra_workspace=ctx.obj["terra_workspace"],
+        gumbo_client=ctx.obj["gumbo_client"],
+        ref_urls=config["ref"],
     )
 
 

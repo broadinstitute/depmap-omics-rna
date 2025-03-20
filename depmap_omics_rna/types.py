@@ -38,6 +38,9 @@ class TerraSample(CoercedDataFrame):
     delivery_file_format: Series[pd.StringDtype] = pa.Field(
         isin={"CRAM", "BAM"}, nullable=True
     )
+    delivery_ref: Series[pd.StringDtype]
+    delivery_ref_fasta: Series[pd.StringDtype]
+    delivery_ref_fasta_index: Series[pd.StringDtype]
 
 
 class GumboTaskEntity(CoercedDataFrame):
