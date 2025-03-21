@@ -1,0 +1,38 @@
+{
+  "deleted": false,
+  "inputs": {
+    "process_sr_rna.align_bam_with_star.docker_image": "\"us-docker.pkg.dev/depmap-omics/public/star_arriba\"",
+    "process_sr_rna.align_bam_with_star.docker_image_hash_or_tag": "\"@sha256:bafa338583b54f8fe8e5a6ff05ec9fad2c5f0a5b6d5393608bbd1130157cc042\"",
+    "process_sr_rna.align_cram_with_star.docker_image": "\"us-docker.pkg.dev/depmap-omics/public/star_arriba\"",
+    "process_sr_rna.align_cram_with_star.docker_image_hash_or_tag": "\"@sha256:bafa338583b54f8fe8e5a6ff05ec9fad2c5f0a5b6d5393608bbd1130157cc042\"",
+    "process_sr_rna.call_fusions_with_arriba.docker_image": "\"us-docker.pkg.dev/depmap-omics/public/star_arriba\"",
+    "process_sr_rna.call_fusions_with_arriba.docker_image_hash_or_tag": "\"@sha256:bafa338583b54f8fe8e5a6ff05ec9fad2c5f0a5b6d5393608bbd1130157cc042\"",
+    "process_sr_rna.crai_bai": "this.delivery_crai_bai",
+    "process_sr_rna.cram_bam": "this.delivery_cram_bam",
+    "process_sr_rna.cram_or_bam": "this.delivery_file_format",
+    "process_sr_rna.gtf": "\"gs://ccleparams/rna/gencode.v38_with_viral_corrected.gtf\"",
+    "process_sr_rna.quantify_with_salmon.docker_image": "\"us-docker.pkg.dev/depmap-omics/public/salmon\"",
+    "process_sr_rna.quantify_with_salmon.docker_image_hash_or_tag": "\"@sha256:eaba8892f76da481f23f5f5317aedab5214be45ea0ee64387b371a70e2f302c3\"",
+    "process_sr_rna.ref_fasta": "this.delivery_ref_fasta",
+    "process_sr_rna.ref_fasta_index": "this.delivery_ref_fasta_index",
+    "process_sr_rna.sample_id": "this.sample_id",
+    "process_sr_rna.star_index": "\"gs://ccleparams/STAR_index_hg38_with_viral.tar.gz\"",
+    "process_sr_rna.targets": "\"gs://ccleparams/rna/hg38_with_viral_transcripts_corrected.fa\""
+  },
+  "methodConfigVersion": 1,
+  "methodRepoMethod": {
+    "methodNamespace": "cds-pipelines",
+    "methodName": "process_sr_rna",
+    "methodVersion": 1
+  },
+  "namespace": "cds-pipelines",
+  "name": "process_sr_rna",
+  "outputs": {
+    "process_sr_rna.fusions": "this.fusions",
+    "process_sr_rna.fusions_discarded": "this.fusions_discarded",
+    "process_sr_rna.quant_genes": "this.quant_genes",
+    "process_sr_rna.quant_transcripts": "this.quant_transcripts",
+    "process_sr_rna.reads_per_gene": "this.reads_per_gene"
+  },
+  "rootEntityType": "sample"
+}

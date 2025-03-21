@@ -211,8 +211,16 @@ def submit_delta_job(
         v[5:] for k, v in workflow_config["inputs"].items() if v.startswith("this.")
     }
 
+    # output_cols = {
+    #     v[5:] for k, v in workflow_config["outputs"].items() if v.startswith("this.")
+    # }
     output_cols = {
-        v[5:] for k, v in workflow_config["outputs"].items() if v.startswith("this.")
+        "fusions",
+        "fusions_discarded",
+        "quant_genes",
+        "quant_transcripts",
+        "reads_per_gene",
+        "transcriptome_bam",
     }
 
     # get the entities for this workflow entity type
@@ -257,6 +265,10 @@ def submit_delta_job(
             )
         )
     ]
+
+    if len(entities_todo) == 0:
+        logging.info(f"No {entity_type}s to run {terra_workflow.method_name} for")
+        return
 
     if dry_run:
         logging.info(f"(skipping) Submitting {terra_workflow.method_name} job")

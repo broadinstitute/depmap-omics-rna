@@ -66,6 +66,7 @@ task align_with_star {
         String docker_image
         String docker_image_hash_or_tag
         Int cpu = 16
+        Int mem_gb = 48
         Int preemptible = 1
         Int max_retries = 1
         Int additional_disk_gb = 0
@@ -82,9 +83,9 @@ task align_with_star {
 
     Int n_threads = cpu - 1
 
-    Int dyn_mem_gb = ceil(10 * bam_size_gb)
-    Int max_mem_gb = if (dyn_mem_gb > 128) then 128 else dyn_mem_gb
-    Int mem_gb = if (max_mem_gb < 32) then 32 else max_mem_gb
+#    Int dyn_mem_gb = ceil(10 * bam_size_gb)
+#    Int max_mem_gb = if (dyn_mem_gb > 128) then 128 else dyn_mem_gb
+#    Int mem_gb = if (max_mem_gb < 32) then 32 else max_mem_gb
 
     command <<<
         set -euo pipefail
