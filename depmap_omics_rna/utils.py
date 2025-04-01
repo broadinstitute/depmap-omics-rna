@@ -211,16 +211,8 @@ def submit_delta_job(
         v[5:] for k, v in workflow_config["inputs"].items() if v.startswith("this.")
     }
 
-    # output_cols = {
-    #     v[5:] for k, v in workflow_config["outputs"].items() if v.startswith("this.")
-    # }
     output_cols = {
-        "fusions",
-        "fusions_discarded",
-        "quant_genes",
-        "quant_transcripts",
-        "reads_per_gene",
-        "transcriptome_bam",
+        v[5:] for k, v in workflow_config["outputs"].items() if v.startswith("this.")
     }
 
     # get the entities for this workflow entity type

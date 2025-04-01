@@ -83,10 +83,6 @@ task align_with_star {
 
     Int n_threads = cpu - 1
 
-#    Int dyn_mem_gb = ceil(10 * bam_size_gb)
-#    Int max_mem_gb = if (dyn_mem_gb > 128) then 128 else dyn_mem_gb
-#    Int mem_gb = if (max_mem_gb < 32) then 32 else max_mem_gb
-
     command <<<
         set -euo pipefail
 
