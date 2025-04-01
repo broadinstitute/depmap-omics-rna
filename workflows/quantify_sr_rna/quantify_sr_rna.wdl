@@ -9,6 +9,7 @@ workflow quantify_sr_rna {
         File transcriptome_bam
         File targets
         File gtf
+        String lib_type = "IU"
     }
 
     call quantify_with_salmon {
@@ -16,7 +17,8 @@ workflow quantify_sr_rna {
             sample_id = sample_id,
             transcriptome_bam = transcriptome_bam,
             gtf = gtf,
-            targets = targets
+            targets = targets,
+            lib_type = lib_type
     }
 
     output {
@@ -31,6 +33,7 @@ task quantify_with_salmon {
         File transcriptome_bam
         File targets
         File gtf
+        String lib_type
 
         String docker_image
         String docker_image_hash_or_tag
@@ -54,7 +57,7 @@ task quantify_with_salmon {
         salmon quant \
             --threads ~{n_threads} \
             --targets "~{targets}" \
-            --libType A \
+            --libType "~{lib_type}" \
             --alignments "~{transcriptome_bam}" \
             --geneMap "~{gtf}" \
             --numBootstraps 20 \

@@ -18,6 +18,7 @@ workflow process_sr_rna {
         File star_index
         File gtf
         File targets
+        String salmon_lib_type = "IU"
     }
 
     if (cram_or_bam == "BAM") {
@@ -62,7 +63,8 @@ workflow process_sr_rna {
                 align_cram_with_star.transcriptome_bam
             ]),
             gtf = gtf,
-            targets = targets
+            targets = targets,
+            lib_type = salmon_lib_type
     }
 
     output {

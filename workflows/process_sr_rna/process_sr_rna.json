@@ -11,6 +11,7 @@
     "process_sr_rna.cram_bam": "this.delivery_cram_bam",
     "process_sr_rna.cram_or_bam": "this.delivery_file_format",
     "process_sr_rna.gtf": "\"gs://ccleparams/rna/gencode.v38_with_viral_corrected.gtf\"",
+    "process_sr_rna.salmon_lib_type": "\"IU\"",
     "process_sr_rna.quantify_with_salmon.docker_image": "\"us-docker.pkg.dev/depmap-omics/public/salmon\"",
     "process_sr_rna.quantify_with_salmon.docker_image_hash_or_tag": "\"@sha256:eaba8892f76da481f23f5f5317aedab5214be45ea0ee64387b371a70e2f302c3\"",
     "process_sr_rna.ref_fasta": "this.delivery_ref_fasta",
