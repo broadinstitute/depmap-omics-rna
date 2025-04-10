@@ -18,7 +18,8 @@ workflow process_sr_rna {
         File star_index
         File gtf
         File targets
-        String salmon_lib_type = "IU"
+        Boolean stranded
+        String? salmon_lib_type_override
     }
 
     if (cram_or_bam == "BAM") {
@@ -64,7 +65,8 @@ workflow process_sr_rna {
             ]),
             gtf = gtf,
             targets = targets,
-            lib_type = salmon_lib_type
+            stranded = stranded,
+            lib_type_override = salmon_lib_type_override
     }
 
     output {

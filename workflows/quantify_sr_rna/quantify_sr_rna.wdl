@@ -9,7 +9,8 @@ workflow quantify_sr_rna {
         File transcriptome_bam
         File targets
         File gtf
-        String lib_type = "IU"
+        Boolean stranded
+        String? lib_type_override
     }
 
     call quantify_with_salmon {
@@ -18,7 +19,8 @@ workflow quantify_sr_rna {
             transcriptome_bam = transcriptome_bam,
             gtf = gtf,
             targets = targets,
-            lib_type = lib_type
+            stranded = stranded,
+            lib_type_override = lib_type_override
     }
 
     output {
@@ -33,7 +35,8 @@ task quantify_with_salmon {
         File transcriptome_bam
         File targets
         File gtf
-        String lib_type
+        Boolean stranded
+        String? lib_type_override
 
         String docker_image
         String docker_image_hash_or_tag
@@ -50,6 +53,10 @@ task quantify_with_salmon {
     ) + 10 + additional_disk_gb
 
     Int n_threads = cpu - 1
+
+    String lib_type = if defined(lib_type_override) then lib_type_override else (
+        if stranded then "A" else "IU"
+    )
 
     command <<<
         set -euo pipefail
