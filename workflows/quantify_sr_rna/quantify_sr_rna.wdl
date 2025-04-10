@@ -41,7 +41,7 @@ task quantify_with_salmon {
         String docker_image
         String docker_image_hash_or_tag
         Int mem_gb = 16
-        Int cpu = 4
+        Int cpu = 8
         Int preemptible = 1
         Int max_retries = 1
         Int additional_disk_gb = 0
