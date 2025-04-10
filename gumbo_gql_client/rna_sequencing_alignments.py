@@ -13,6 +13,12 @@ class RnaSequencingAlignmentsRecords(BaseModel):
     reference_genome: Optional[str]
     sequencing_alignment_source: str
     url: str
+    omics_sequencing: "RnaSequencingAlignmentsRecordsOmicsSequencing"
+
+
+class RnaSequencingAlignmentsRecordsOmicsSequencing(BaseModel):
+    stranded: Optional[bool]
 
 
 RnaSequencingAlignments.model_rebuild()
+RnaSequencingAlignmentsRecords.model_rebuild()

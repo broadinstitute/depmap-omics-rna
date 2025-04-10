@@ -28,7 +28,8 @@ class GumboAlignment(CoercedDataFrame):
     sequencing_alignment_source: Series[pd.StringDtype] = pa.Field(isin=["GP", "CDS"])
     reference_genome: Series[pd.StringDtype]
     url: Series[pd.StringDtype] = pa.Field(unique=True)
-    index_url: Series[pd.StringDtype] = pa.Field(unique=True)
+    index_url: Series[pd.StringDtype] = pa.Field(nullable=True)
+    stranded: Series[pd.BooleanDtype]
 
 
 class TerraSample(CoercedDataFrame):
@@ -38,6 +39,7 @@ class TerraSample(CoercedDataFrame):
     delivery_file_format: Series[pd.StringDtype] = pa.Field(
         isin={"CRAM", "BAM"}, nullable=True
     )
+    delivery_stranded: Series[pd.BooleanDtype]
     delivery_ref: Series[pd.StringDtype]
     delivery_ref_fasta: Series[pd.StringDtype]
     delivery_ref_fasta_index: Series[pd.StringDtype]

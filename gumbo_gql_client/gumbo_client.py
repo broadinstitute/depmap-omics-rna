@@ -49,6 +49,9 @@ class GumboClient(BaseClient):
                 reference_genome
                 sequencing_alignment_source
                 url
+                omics_sequencing {
+                  stranded
+                }
               }
             }
             """

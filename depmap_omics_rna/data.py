@@ -1,10 +1,12 @@
 import datetime
 import json
 import logging
+from functools import partial
 
 import pandas as pd
 from nebelung.terra_workspace import TerraWorkspace
 from nebelung.utils import type_data_frame
+from pd_flatten import pd_flatten
 
 from depmap_omics_rna.types import (
     GumboAlignment,
@@ -36,9 +38,13 @@ def do_refresh_terra_samples(
     """
 
     # get long data frame of both GP-delivered and CDS (analysis ready) CRAM/BAMs
-    alignments = model_to_df(gumbo_client.rna_sequencing_alignments(), GumboAlignment)
+    alignments = model_to_df(
+        gumbo_client.rna_sequencing_alignments(),
+        GumboAlignment,
+        mutator=partial(pd_flatten, name_columns_with_parent=False),
+    )
 
-    # make wide, separating delivery and analysis-ready CRAM/BAMs
+    # make wide, separating delivery and old analysis-ready CRAM/BAMs
     samples = (
         alignments.loc[alignments["sequencing_alignment_source"].eq("GP")]
         .drop(columns=["sequencing_alignment_source"])
@@ -49,6 +55,7 @@ def do_refresh_terra_samples(
                 "url": "delivery_cram_bam",
                 "index_url": "delivery_crai_bai",
                 "reference_genome": "delivery_ref",
+                "stranded": "delivery_stranded",
             }
         )
         .merge(
@@ -64,6 +71,7 @@ def do_refresh_terra_samples(
                     "url": "old_analysis_ready_bam",
                     "index_url": "old_analysis_ready_bai",
                     "reference_genome": "old_analysis_ready_ref",
+                    "stranded": "old_analysis_ready_stranded",
                 }
             ),
             how="outer",
@@ -71,6 +79,7 @@ def do_refresh_terra_samples(
         )
     )
 
+    # use old analysis-ready BAMs as a backup for the original GP-delivered ones
     samples["delivery_cram_bam"] = samples["delivery_cram_bam"].fillna(
         samples["old_analysis_ready_bam"]
     )
@@ -81,6 +90,10 @@ def do_refresh_terra_samples(
 
     samples["delivery_ref"] = samples["delivery_ref"].fillna(
         samples["old_analysis_ready_ref"]
+    )
+
+    samples["delivery_stranded"] = samples["delivery_stranded"].fillna(
+        samples["old_analysis_ready_stranded"]
     )
 
     samples["delivery_file_format"] = (

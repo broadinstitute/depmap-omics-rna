@@ -449,6 +449,7 @@ from .insert_terra_sync import (
 from .rna_sequencing_alignments import (
     RnaSequencingAlignments,
     RnaSequencingAlignmentsRecords,
+    RnaSequencingAlignmentsRecordsOmicsSequencing,
 )
 from .sequencing_ids import SequencingIds, SequencingIdsRecords
 from .sequencing_task_entities import (
@@ -483,6 +484,7 @@ __all__ = [
     "Int_comparison_exp",
     "RnaSequencingAlignments",
     "RnaSequencingAlignmentsRecords",
+    "RnaSequencingAlignmentsRecordsOmicsSequencing",
     "SequencingIds",
     "SequencingIdsRecords",
     "SequencingTaskEntities",
