@@ -10,3 +10,33 @@ workflows:
       branches:
         - main
     publish: True
+  - subclass: WDL
+    name: call_sr_rna_fusions
+    readMePath: /workflows/call_sr_rna_fusions/README.md
+    primaryDescriptorPath: /workflows/call_sr_rna_fusions/call_sr_rna_fusions.wdl
+    testParameterFiles:
+      - /workflows/call_sr_rna_fusions/call_sr_rna_fusions.json
+    filters:
+      branches:
+        - main
+    publish: True
+  - subclass: WDL
+    name: quantify_sr_rna
+    readMePath: /workflows/quantify_sr_rna/README.md
+    primaryDescriptorPath: /workflows/quantify_sr_rna/quantify_sr_rna.wdl
+    testParameterFiles:
+      - /workflows/quantify_sr_rna/quantify_sr_rna.json
+    filters:
+      branches:
+        - main
+    publish: True
+  - subclass: WDL
+    name: process_sr_rna
+    readMePath: /workflows/process_sr_rna/README.md
+    primaryDescriptorPath: /workflows/process_sr_rna/process_sr_rna.wdl
+    testParameterFiles:
+      - /workflows/process_sr_rna/process_sr_rna.json
+    filters:
+      branches:
+        - main
+    publish: True
