@@ -42,10 +42,6 @@ workflow align_rna_sample {
             align_bam_with_star.transcriptome_bam,
             align_cram_with_star.transcriptome_bam
         ])
-        File analysis_ready_bam = select_first([
-            align_bam_with_star.analysis_ready_bam,
-            align_cram_with_star.analysis_ready_bam
-        ])
         File reads_per_gene = select_first([
             align_bam_with_star.reads_per_gene,
             align_cram_with_star.reads_per_gene
@@ -158,7 +154,6 @@ task align_with_star {
     >>>
 
     output {
-        File analysis_ready_bam = "~{sample_id}.Aligned.out.bam"
         File reads_per_gene = "~{sample_id}.ReadsPerGene.out.tab"
         File transcriptome_bam = "~{sample_id}.Aligned.toTranscriptome.out.bam"
     }
