@@ -31,6 +31,7 @@
   "outputs": {
     "process_sr_rna.fusions": "this.fusions",
     "process_sr_rna.fusions_discarded": "this.fusions_discarded",
+    "process_sr_rna.junctions": "this.junctions",
     "process_sr_rna.quant_genes": "this.quant_genes",
     "process_sr_rna.quant_transcripts": "this.quant_transcripts",
     "process_sr_rna.reads_per_gene": "this.reads_per_gene"

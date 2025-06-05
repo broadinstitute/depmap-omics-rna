@@ -22,6 +22,7 @@
   "namespace": "cds-pipelines",
   "name": "align_rna_sample",
   "outputs": {
+    "align_rna_sample.junctions": "this.junctions",
     "align_rna_sample.reads_per_gene": "this.reads_per_gene",
     "align_rna_sample.transcriptome_bam": "this.transcriptome_bam"
   },

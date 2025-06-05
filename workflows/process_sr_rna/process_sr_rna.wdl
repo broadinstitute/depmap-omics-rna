@@ -74,6 +74,10 @@ workflow process_sr_rna {
             align_bam_with_star.reads_per_gene,
             align_cram_with_star.reads_per_gene
         ])
+        File junctions = select_first([
+            align_bam_with_star.junctions,
+            align_cram_with_star.junctions
+        ])
         File fusions = call_fusions_with_arriba.fusions
         File fusions_discarded = call_fusions_with_arriba.fusions_discarded
         File quant_transcripts = quantify_with_salmon.quant_transcripts

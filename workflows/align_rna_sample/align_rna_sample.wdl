@@ -38,6 +38,10 @@ workflow align_rna_sample {
     }
 
     output {
+        File junctions = select_first([
+            align_bam_with_star.junctions,
+            align_cram_with_star.junctions
+        ])
         File transcriptome_bam = select_first([
             align_bam_with_star.transcriptome_bam,
             align_cram_with_star.transcriptome_bam
@@ -154,6 +158,7 @@ task align_with_star {
     >>>
 
     output {
+        File junctions = "~{sample_id}.SJ.out.tab.gz"
         File reads_per_gene = "~{sample_id}.ReadsPerGene.out.tab"
         File transcriptome_bam = "~{sample_id}.Aligned.toTranscriptome.out.bam"
     }
