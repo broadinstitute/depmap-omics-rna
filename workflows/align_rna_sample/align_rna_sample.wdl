@@ -163,7 +163,7 @@ task align_with_star {
 
     output {
         File analysis_ready_bam = "~{sample_id}.Aligned.out.bam"
-        File junctions = "~{sample_id}.SJ.out.tab.gz"
+        File junctions = "~{sample_id}.SJ.out.tab"
         File reads_per_gene = "~{sample_id}.ReadsPerGene.out.tab"
         File transcriptome_bam = "~{sample_id}.Aligned.toTranscriptome.out.bam"
     }
