@@ -2,9 +2,6 @@ version 1.0
 
 workflow call_sr_rna_fusions {
     input {
-        String workflow_version = "1.0" # internal semver
-        String workflow_source_url # populated automatically with URL of this script
-
         String sample_id
         File analysis_ready_bam
         File ref_fasta

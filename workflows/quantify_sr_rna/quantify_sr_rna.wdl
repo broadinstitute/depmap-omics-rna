@@ -2,9 +2,6 @@ version 1.0
 
 workflow quantify_sr_rna {
     input {
-        String workflow_version = "1.0" # internal semver
-        String workflow_source_url # populated automatically with URL of this script
-
         String sample_id
         File transcriptome_bam
         File targets

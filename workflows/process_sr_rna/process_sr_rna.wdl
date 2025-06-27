@@ -6,12 +6,10 @@ import "../quantify_sr_rna/quantify_sr_rna.wdl" as quantify_sr_rna
 
 workflow process_sr_rna {
     input {
-        String workflow_version = "1.0" # internal semver
-        String workflow_source_url # populated automatically with URL of this script
-
         String sample_id
-        String cram_or_bam
-        File cram_bam
+        String input_file_type
+        Array[File]? fastqs
+        File? cram_bam
         File? crai_bai
         File ref_fasta
         File? ref_fasta_index
@@ -22,21 +20,31 @@ workflow process_sr_rna {
         String? salmon_lib_type_override
     }
 
-    if (cram_or_bam == "BAM") {
+    if (input_file_type == "FASTQ") {
+        call align_rna_sample.align_with_star as align_fastq_with_star {
+            input:
+                sample_id = sample_id,
+                input_file_type = input_file_type,
+                fastqs = fastqs,
+                star_index = star_index
+        }
+    }
+
+    if (input_file_type == "BAM") {
         call align_rna_sample.align_with_star as align_bam_with_star {
             input:
                 sample_id = sample_id,
-                cram_or_bam = cram_or_bam,
+                input_file_type = input_file_type,
                 cram_bam = cram_bam,
                 star_index = star_index
         }
     }
 
-    if (cram_or_bam == "CRAM") {
+    if (input_file_type == "CRAM") {
         call align_rna_sample.align_with_star as align_cram_with_star {
             input:
                 sample_id = sample_id,
-                cram_or_bam = cram_or_bam,
+                input_file_type = input_file_type,
                 cram_bam = cram_bam,
                 crai_bai = crai_bai,
                 ref_fasta = ref_fasta,
@@ -71,10 +79,12 @@ workflow process_sr_rna {
 
     output {
         File reads_per_gene = select_first([
+            align_fastq_with_star.reads_per_gene,
             align_bam_with_star.reads_per_gene,
             align_cram_with_star.reads_per_gene
         ])
         File junctions = select_first([
+            align_fastq_with_star.junctions,
             align_bam_with_star.junctions,
             align_cram_with_star.junctions
         ])

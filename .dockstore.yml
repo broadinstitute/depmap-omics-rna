@@ -9,7 +9,7 @@ workflows:
     filters:
       branches:
         - main
-        - dev
+        - develop
     publish: True
   - subclass: WDL
     name: call_sr_rna_fusions
@@ -20,7 +20,7 @@ workflows:
     filters:
       branches:
         - main
-        - dev
+        - develop
     publish: True
   - subclass: WDL
     name: quantify_sr_rna
@@ -31,7 +31,7 @@ workflows:
     filters:
       branches:
         - main
-        - dev
+        - develop
     publish: True
   - subclass: WDL
     name: process_sr_rna
@@ -42,5 +42,5 @@ workflows:
     filters:
       branches:
         - main
-        - dev
+        - develop
     publish: True
