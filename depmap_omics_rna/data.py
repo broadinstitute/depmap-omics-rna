@@ -156,7 +156,7 @@ def pick_best_task_results(
     # check that distinct output labels (i.e. data table columns) don't come from
     # different workflows
     workflow_names_per_label = (
-        task_results[["workflow_name", "label"]]
+        task_results.loc[:, ["workflow_name", "label"]]
         .drop_duplicates()["label"]
         .value_counts()
     )
@@ -176,7 +176,9 @@ def pick_best_task_results(
 
     # get unique file (URL) outputs for each sample+label
     task_result_files = (
-        task_results[["sample_id", "label", "url", "workflow_version", "completed_at"]]
+        task_results.loc[
+            :, ["sample_id", "label", "url", "workflow_version", "completed_at"]
+        ]
         .dropna(subset=["sample_id", "label", "url"])
         .drop_duplicates(subset=["sample_id", "label", "url"])
     )
@@ -193,8 +195,8 @@ def pick_best_task_results(
     )
 
     # get unique value outputs for each sample+label
-    task_result_values = task_results[
-        ["sample_id", "label", "value", "workflow_version", "completed_at"]
+    task_result_values = task_results.loc[
+        :, ["sample_id", "label", "value", "workflow_version", "completed_at"]
     ].dropna(subset=["sample_id", "label", "value"])
 
     # drop NA values
@@ -267,8 +269,8 @@ def put_task_results(
     for x in all_outputs:
         if (
             x.terra_entity_type != "sample"
-            or "sample_id" not in x.terra_workflow_inputs
-            or x.terra_workflow_inputs["sample_id"] not in valid_seq_ids
+            or "sample_id" not in x.terra_workflow_inputs  # pyright: ignore
+            or x.terra_workflow_inputs["sample_id"] not in valid_seq_ids  # pyright: ignore
         ):
             # not persisting outputs for jobs that didn't operate on samples or for
             # unknown sequencing/sample IDs
@@ -277,7 +279,7 @@ def put_task_results(
         o = x.model_copy()
 
         # replace the entity name with the more reliable `sample_id` workflow input
-        o.terra_entity_name = o.terra_workflow_inputs["sample_id"]
+        o.terra_entity_name = o.terra_workflow_inputs["sample_id"]  # pyright: ignore
 
         # do trivial conversion from `TaskResult` to `task_result_insert_input` type
         outputs.append(task_result_insert_input(**o.model_dump()))
