@@ -9,7 +9,7 @@ import tomllib
 import typer
 from nebelung.terra_workspace import TerraWorkspace
 
-from depmap_omics_rna.data import do_refresh_terra_samples, put_task_results
+from depmap_omics_rna import data
 from depmap_omics_rna.types import GumboClient
 from depmap_omics_rna.utils import (
     get_hasura_creds,
@@ -95,7 +95,7 @@ def update_workflow(
 
 @app.command()
 def refresh_terra_samples(ctx: typer.Context) -> None:
-    do_refresh_terra_samples(
+    data.refresh_terra_samples(
         terra_workspace=ctx.obj["terra_workspace"],
         gumbo_client=ctx.obj["get_gumbo_client"](),
         ref_urls=config["ref"],
@@ -110,25 +110,27 @@ def delta_job(
     entity_set_type: Annotated[str, typer.Option()],
     entity_id_col: Annotated[str, typer.Option()],
     expression: Annotated[str, typer.Option()],
+    input_col: Annotated[list[str] | None, typer.Option()] = None,
+    output_col: Annotated[list[str] | None, typer.Option()] = None,
 ) -> None:
-    submit_delta_job(
-        terra_workspace=ctx.obj["terra_workspace"],
+    input_cols_set = None
+    output_cols_set = None
+
+    if input_col is not None:
+        input_cols_set = set(input_col)
+
+    if output_col is not None:
+        output_cols_set = set(output_col)
+
+    ctx.obj["terra_workspace"].submit_delta_job(
         terra_workflow=make_workflow_from_config(config, workflow_name),
         entity_type=entity_type,
         entity_set_type=entity_set_type,
         entity_id_col=entity_id_col,
         expression=expression,
         dry_run=config["dry_run"],
-    )
-
-
-@app.command()
-def persist_outputs_in_gumbo(ctx: typer.Context) -> None:
-    put_task_results(
-        gumbo_client=ctx.obj["get_gumbo_client"](),
-        terra_workspace=ctx.obj["terra_workspace"],
-        gcp_project_id=config["gcp_project_id"],
-        uuid_namespace=config["uuid_namespace"],
+        input_cols=input_cols_set,
+        output_cols=output_cols_set,
     )
 
 

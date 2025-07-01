@@ -1,5 +1,0 @@
-query SequencingIds {
-  records: omics_sequencing {
-    sequencing_id
-  }
-}

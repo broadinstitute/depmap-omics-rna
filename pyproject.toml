@@ -17,11 +17,11 @@ pydantic = "^2.10.6"
 google-cloud-storage = "^2.19.0"
 google-cloud-logging = "^3.11.4"
 functions-framework = "^3.8.2"
-typer = "^0.9.4"
+typer = "^0.16.0"
 pygithub = "^2.6.1"
 pd-flatten = "^0.1.1"
 google-cloud-secret-manager = "^2.23.1"
-nebelung = "^2.6.0"
+nebelung = "^2.9.1"
 
 [tool.poetry.group.dev.dependencies]
 pyarrow = "^15.0.2"
@@ -29,6 +29,7 @@ ruff = "^0.12.1"
 pyright = "^1.1.402"
 fsspec = "^2025.5.1"
 gcsfs = "^2025.5.1"
+pandas-stubs = "^2.2.3.250527"
 
 [[tool.poetry.source]]
 name = "public-python"
