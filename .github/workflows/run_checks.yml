@@ -39,4 +39,4 @@ jobs:
           uv pip install .
 
       - name: Run pyright
-        run: pyright
+        run: uv run pyright
