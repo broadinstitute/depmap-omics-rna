@@ -15,7 +15,6 @@ from depmap_omics_rna.utils import (
     get_hasura_creds,
     get_secret_from_sm,
     make_workflow_from_config,
-    submit_delta_job,
 )
 
 pd.set_option("display.max_columns", 30)
