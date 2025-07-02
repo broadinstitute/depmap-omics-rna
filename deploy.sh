@@ -2,12 +2,12 @@
 
 set -euo pipefail
 
-pre-commit run poetry-export --all-files
+uv pip compile pyproject.toml -o requirements.txt --emit-index-url > requirements.txt
 
 echo "Updating GCP Function"
 gcloud functions deploy depmap-omics-rna \
   --gen2 \
-  --runtime="python312" \
+  --runtime="python313" \
   --region="us-central1" \
   --source=. \
   --run-service-account="omics-pipeline-runner@depmap-omics.iam.gserviceaccount.com" \
