@@ -1,6 +1,6 @@
 version 1.0
 
-workflow align_rna_sample {
+workflow align_sr_rna {
     input {
         String sample_id
         String input_file_type
@@ -12,60 +12,23 @@ workflow align_rna_sample {
         File star_index
     }
 
-    if (input_file_type == "FASTQ") {
-        call align_with_star as align_fastq_with_star {
-            input:
-                sample_id = sample_id,
-                input_file_type = input_file_type,
-                fastqs = fastqs,
-                star_index = star_index
-        }
-    }
-
-    if (input_file_type == "BAM") {
-        call align_with_star as align_bam_with_star {
-            input:
-                sample_id = sample_id,
-                input_file_type = input_file_type,
-                cram_bam = cram_bam,
-                star_index = star_index
-        }
-    }
-
-    if (input_file_type == "CRAM") {
-        call align_with_star as align_cram_with_star {
-            input:
-                sample_id = sample_id,
-                input_file_type = input_file_type,
-                cram_bam = cram_bam,
-                crai_bai = crai_bai,
-                ref_fasta = ref_fasta,
-                ref_fasta_index = ref_fasta_index,
-                star_index = star_index
-        }
+    call align_with_star {
+        input:
+            sample_id = sample_id,
+            input_file_type = input_file_type,
+            fastqs = fastqs,
+            cram_bam = cram_bam,
+            crai_bai = crai_bai,
+            ref_fasta = ref_fasta,
+            ref_fasta_index = ref_fasta_index,
+            star_index = star_index
     }
 
     output {
-        File analysis_ready_bam = select_first([
-            align_fastq_with_star.analysis_ready_bam,
-            align_bam_with_star.analysis_ready_bam,
-            align_cram_with_star.analysis_ready_bam
-        ])
-        File junctions = select_first([
-            align_fastq_with_star.junctions,
-            align_bam_with_star.junctions,
-            align_cram_with_star.junctions
-        ])
-        File transcriptome_bam = select_first([
-            align_fastq_with_star.transcriptome_bam,
-            align_bam_with_star.transcriptome_bam,
-            align_cram_with_star.transcriptome_bam
-        ])
-        File reads_per_gene = select_first([
-            align_fastq_with_star.reads_per_gene,
-            align_bam_with_star.reads_per_gene,
-            align_cram_with_star.reads_per_gene
-        ])
+        File analysis_ready_bam = align_with_star.analysis_ready_bam
+        File junctions = align_with_star.junctions
+        File transcriptome_bam = align_with_star.transcriptome_bam
+        File reads_per_gene = align_with_star.reads_per_gene
     }
 }
 
@@ -80,8 +43,6 @@ task align_with_star {
         File? ref_fasta_index
         File star_index
 
-        String docker_image
-        String docker_image_hash_or_tag
         Int cpu = 16
         Int mem_gb = 48
         Int preemptible = 1
@@ -194,7 +155,7 @@ task align_with_star {
     }
 
     runtime {
-        docker: "~{docker_image}~{docker_image_hash_or_tag}"
+        docker: "us-docker.pkg.dev/depmap-omics/public/star_arriba:production"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible

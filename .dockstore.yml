@@ -1,11 +1,11 @@
 version: 1.2
 workflows:
   - subclass: WDL
-    name: align_rna_sample
-    readMePath: /workflows/align_rna_sample/README.md
-    primaryDescriptorPath: /workflows/align_rna_sample/align_rna_sample.wdl
+    name: align_sr_rna
+    readMePath: /workflows/align_sr_rna/README.md
+    primaryDescriptorPath: /workflows/align_sr_rna/align_sr_rna.wdl
     testParameterFiles:
-      - /workflows/align_rna_sample/align_rna_sample.json
+      - /workflows/align_sr_rna/align_sr_rna.json
     filters:
       branches:
         - main

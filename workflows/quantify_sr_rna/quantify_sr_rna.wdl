@@ -7,22 +7,33 @@ workflow quantify_sr_rna {
         File targets
         File gtf
         Boolean stranded
-        String? lib_type_override
     }
 
-    call quantify_with_salmon {
+    if (stranded) {
+        call quantify_with_salmon as quantify_with_salmon_auto {
+            input:
+                sample_id = sample_id,
+                transcriptome_bam = transcriptome_bam,
+                gtf = gtf,
+                targets = targets,
+                lib_type = "A"
+        }
+    }
+
+    call quantify_with_salmon as quantify_with_salmon_iu {
         input:
             sample_id = sample_id,
             transcriptome_bam = transcriptome_bam,
             gtf = gtf,
             targets = targets,
-            stranded = stranded,
-            lib_type_override = lib_type_override
+            lib_type = "IU"
     }
 
     output {
-        File quant_transcripts = quantify_with_salmon.quant_transcripts
-        File quant_genes = quantify_with_salmon.quant_genes
+        File? quant_transcripts_auto = quantify_with_salmon_auto.quant_transcripts
+        File? quant_genes_auto = quantify_with_salmon_auto.quant_genes
+        File quant_genes_iu = quantify_with_salmon_iu.quant_genes
+        File quant_transcripts_iu = quantify_with_salmon_iu.quant_transcripts
     }
 }
 
@@ -32,11 +43,8 @@ task quantify_with_salmon {
         File transcriptome_bam
         File targets
         File gtf
-        Boolean stranded
-        String? lib_type_override
+        String lib_type
 
-        String docker_image
-        String docker_image_hash_or_tag
         Int mem_gb = 16
         Int cpu = 8
         Int preemptible = 1
@@ -50,10 +58,6 @@ task quantify_with_salmon {
     ) + 10 + additional_disk_gb
 
     Int n_threads = cpu - 1
-
-    String lib_type = if defined(lib_type_override) then lib_type_override else (
-        if stranded then "A" else "IU"
-    )
 
     command <<<
         set -euo pipefail
@@ -82,7 +86,7 @@ task quantify_with_salmon {
     }
 
     runtime {
-        docker: "~{docker_image}~{docker_image_hash_or_tag}"
+        docker: "us-docker.pkg.dev/depmap-omics/public/salmon:production"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible

@@ -29,8 +29,6 @@ task call_fusions_with_arriba {
         File ref_fasta
         File gtf
 
-        String docker_image
-        String docker_image_hash_or_tag
         Int mem_gb = 8
         Int cpu = 1
         Int preemptible = 1
@@ -61,7 +59,7 @@ task call_fusions_with_arriba {
     }
 
     runtime {
-        docker: "~{docker_image}~{docker_image_hash_or_tag}"
+        docker: "us-docker.pkg.dev/depmap-omics/public/star_arriba:production"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible
