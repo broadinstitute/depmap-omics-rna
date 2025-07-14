@@ -11,8 +11,9 @@ workflow process_sr_rna {
         Array[File]? fastqs
         File? cram_bam
         File? crai_bai
+        File? align_ref_fasta
+        File? align_ref_fasta_index
         File ref_fasta
-        File? ref_fasta_index
         File star_index
         File gtf
         File targets
@@ -26,8 +27,8 @@ workflow process_sr_rna {
             fastqs = fastqs,
             cram_bam = cram_bam,
             crai_bai = crai_bai,
-            ref_fasta = ref_fasta,
-            ref_fasta_index = ref_fasta_index,
+            ref_fasta = align_ref_fasta,
+            ref_fasta_index = align_ref_fasta_index,
             star_index = star_index
     }
 
