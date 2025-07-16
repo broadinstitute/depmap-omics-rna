@@ -59,7 +59,7 @@ task call_fusions_with_arriba {
     }
 
     runtime {
-        docker: "us-docker.pkg.dev/depmap-omics/public/star_arriba:production"
+        docker: "us-docker.pkg.dev/depmap-omics/terra-images/star_arriba:production"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible

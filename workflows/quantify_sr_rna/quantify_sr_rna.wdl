@@ -86,7 +86,7 @@ task quantify_with_salmon {
     }
 
     runtime {
-        docker: "us-docker.pkg.dev/depmap-omics/public/salmon:production"
+        docker: "us-central1-docker.pkg.dev/depmap-omics/terra-images/salmon:production"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible
