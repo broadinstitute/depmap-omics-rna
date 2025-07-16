@@ -155,7 +155,7 @@ task align_with_star {
     }
 
     runtime {
-        docker: "us-docker.pkg.dev/depmap-omics/terra-images/star_arriba:production"
+        docker: "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba:production"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible
