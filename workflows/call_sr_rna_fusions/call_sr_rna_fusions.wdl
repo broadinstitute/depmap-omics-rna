@@ -29,8 +29,8 @@ task call_fusions_with_arriba {
         File ref_fasta
         File gtf
 
-        Int mem_gb = 8
-        Int cpu = 1
+        Int mem_gb = 16
+        Int cpu = 2
         Int preemptible = 1
         Int max_retries = 1
         Int additional_disk_gb = 0
@@ -45,6 +45,7 @@ task call_fusions_with_arriba {
         set -euo pipefail
 
         arriba \
+            -@ ~{cpu} \
             -x "~{analysis_ready_bam}" \
             -o "~{sample_id}.arriba_out_fusions.tsv" \
             -O "~{sample_id}.arriba_out_fusions.discarded.tsv" \
