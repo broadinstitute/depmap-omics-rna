@@ -29,10 +29,8 @@ task call_fusions_with_arriba {
         File ref_fasta
         File gtf
 
-        String docker_image
-        String docker_image_hash_or_tag
-        Int mem_gb = 8
-        Int cpu = 1
+        Int mem_gb = 16
+        Int cpu = 2
         Int preemptible = 1
         Int max_retries = 1
         Int additional_disk_gb = 0
@@ -47,6 +45,7 @@ task call_fusions_with_arriba {
         set -euo pipefail
 
         arriba \
+            -@ ~{cpu} \
             -x "~{analysis_ready_bam}" \
             -o "~{sample_id}.arriba_out_fusions.tsv" \
             -O "~{sample_id}.arriba_out_fusions.discarded.tsv" \
@@ -61,7 +60,7 @@ task call_fusions_with_arriba {
     }
 
     runtime {
-        docker: "~{docker_image}~{docker_image_hash_or_tag}"
+        docker: "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba:production"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible

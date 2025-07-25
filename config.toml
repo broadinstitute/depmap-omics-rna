@@ -10,14 +10,14 @@ repo_namespace = "cds-pipelines"
 workspace_namespace = "broad-firecloud-ccle"
 workspace_name = "depmap-omics-rna"
 
-[terra.align_rna_sample]
+[terra.align_sr_rna]
 method_namespace = "cds-pipelines"
-method_name = "align_rna_sample"
+method_name = "align_sr_rna"
 method_config_namespace = "cds-pipelines"
-method_config_name = "align_rna_sample"
+method_config_name = "align_sr_rna"
 method_synopsis = "Align a single RNA sample using STAR"
-workflow_wdl_path = "./workflows/align_rna_sample/align_rna_sample.wdl"
-method_config_json_path = "./workflows/align_rna_sample/align_rna_sample.json"
+workflow_wdl_path = "./workflows/align_sr_rna/align_sr_rna.wdl"
+method_config_json_path = "./workflows/align_sr_rna/align_sr_rna.json"
 
 [terra.call_sr_rna_fusions]
 method_namespace = "cds-pipelines"
