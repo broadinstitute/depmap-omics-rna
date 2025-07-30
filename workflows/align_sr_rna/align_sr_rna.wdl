@@ -55,9 +55,9 @@ task align_with_star {
             ceil(size(select_first([fastqs, []]), "GiB"))
         else (
             if input_file_type == "CRAM" then
-                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 3)
+                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 5)
             else # BAM
-                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB"))
+                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 1.5)
         )
     ) + ceil(size(star_index, "GiB") * 5) + 20 + additional_disk_gb
 
