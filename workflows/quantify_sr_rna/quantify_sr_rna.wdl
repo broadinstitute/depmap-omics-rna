@@ -45,6 +45,8 @@ task quantify_with_salmon {
         File gtf
         String lib_type
 
+        String docker_image = "us-central1-docker.pkg.dev/depmap-omics/terra-images/salmon"
+        String docker_image_hash_or_tag = ":production"
         Int mem_gb = 16
         Int cpu = 8
         Int preemptible = 1
@@ -86,7 +88,7 @@ task quantify_with_salmon {
     }
 
     runtime {
-        docker: "us-central1-docker.pkg.dev/depmap-omics/terra-images/salmon:production"
+        docker: "~{docker_image}~{docker_image_hash_or_tag}"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible

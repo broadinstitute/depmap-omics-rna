@@ -14,6 +14,8 @@ workflow process_sr_rna {
         File? align_ref_fasta
         File? align_ref_fasta_index
         File ref_fasta
+        Boolean downsample_if_necessary = false
+        Int? max_n_reads
         File star_index
         File gtf
         File targets
@@ -29,6 +31,8 @@ workflow process_sr_rna {
             crai_bai = crai_bai,
             ref_fasta = align_ref_fasta,
             ref_fasta_index = align_ref_fasta_index,
+            downsample_if_necessary = downsample_if_necessary,
+            max_n_reads = max_n_reads,
             star_index = star_index
     }
 

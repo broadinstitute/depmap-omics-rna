@@ -3,8 +3,10 @@
   "inputs": {
     "align_sr_rna.crai_bai": "this.delivery_crai_bai",
     "align_sr_rna.cram_bam": "this.delivery_cram_bam",
+    "align_sr_rna.downsample_if_necessary": "true",
     "align_sr_rna.fastqs": "this.delivery_fastqs",
     "align_sr_rna.input_file_type": "this.delivery_file_format",
+    "align_sr_rna.max_n_reads": "50000000",
     "align_sr_rna.ref_fasta": "this.delivery_ref_fasta",
     "align_sr_rna.ref_fasta_index": "this.delivery_ref_fasta_index",
     "align_sr_rna.sample_id": "this.sample_id",

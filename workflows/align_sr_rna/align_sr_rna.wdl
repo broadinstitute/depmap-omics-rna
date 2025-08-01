@@ -9,6 +9,8 @@ workflow align_sr_rna {
         File? crai_bai
         File? ref_fasta
         File? ref_fasta_index
+        Boolean downsample_if_necessary = false
+        Int? max_n_reads
         File star_index
     }
 
@@ -21,6 +23,8 @@ workflow align_sr_rna {
             crai_bai = crai_bai,
             ref_fasta = ref_fasta,
             ref_fasta_index = ref_fasta_index,
+            downsample_if_necessary = downsample_if_necessary,
+            max_n_reads = max_n_reads,
             star_index = star_index
     }
 
@@ -41,8 +45,12 @@ task align_with_star {
         File? crai_bai
         File? ref_fasta
         File? ref_fasta_index
+        Boolean downsample_if_necessary = false
+        Int? max_n_reads
         File star_index
 
+        String docker_image = "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba"
+        String docker_image_hash_or_tag = ":production"
         Int cpu = 16
         Int mem_gb = 48
         Int preemptible = 1
@@ -55,9 +63,9 @@ task align_with_star {
             ceil(size(select_first([fastqs, []]), "GiB"))
         else (
             if input_file_type == "CRAM" then
-                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 5)
+                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 8)
             else # BAM
-                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 1.5)
+                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 2)
         )
     ) + ceil(size(star_index, "GiB") * 5) + 20 + additional_disk_gb
 
@@ -66,8 +74,7 @@ task align_with_star {
     command <<<
         set -euo pipefail
 
-        if [[ "~{input_file_type}" == "CRAM" ]];
-        then
+        if [[ "~{input_file_type}" == "CRAM" ]]; then
             echo "Converting CRAM to FASTQ"
 
             samtools sort -n \
@@ -81,8 +88,7 @@ task align_with_star {
                 -2 "~{sample_id}.2.fq.gz" -
 
             FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
-        elif [[ "~{input_file_type}" == "BAM" ]];
-        then
+        elif [[ "~{input_file_type}" == "BAM" ]]; then
             echo "Converting BAM to FASTQ"
 
             samtools sort -n \
@@ -96,6 +102,40 @@ task align_with_star {
             FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
         else
             FASTQS_OPTION="~{sep=' ' fastqs}"
+        fi
+
+        if [[ "~{downsample_if_necessary}" == "true" ]]; then
+            if [[ -z "~{max_n_reads}" ]]; then
+                echo "ERROR: max_n_reads is required for downsampling" >&2
+                exit 1
+            fi
+
+            FIRST_FASTQ=$(echo $FASTQS_OPTION | awk '{print $1}')
+
+            if [[ "$FIRST_FASTQ" == *.gz ]]; then
+                N_READS=$(zcat "$FIRST_FASTQ" | awk 'END {print NR/4}')
+            else
+                N_READS=$(awk 'END {print NR/4}' "$FIRST_FASTQ")
+            fi
+
+            if (( $(echo "$N_READS > ~{max_n_reads}" | bc -l) )); then
+                echo "Downsampling $N_READS reads to ~{max_n_reads}"
+
+                for fq in $FASTQS_OPTION; do
+                    if [[ "$fq" == *.gz ]]; then
+                        base="${fq%.gz}"
+                        zcat "$fq" | seqtk sample -2 -s100 - ~{max_n_reads} \
+                            > "${base%.fq}.less.fastq"
+                    else
+                        seqtk sample -2 -s100 "$fq" ~{max_n_reads} \
+                            > "${fq%.fq}.less.fastq"
+                    fi
+
+                    mv "${fq%.fq}.less.fastq" "$fq"
+                done
+            else
+                echo "$N_READS <= ~{max_n_reads} reads (no downsampling)"
+            fi
         fi
 
         echo "Extracting STAR index"
@@ -155,7 +195,7 @@ task align_with_star {
     }
 
     runtime {
-        docker: "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba:production"
+        docker: "~{docker_image}~{docker_image_hash_or_tag}"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible

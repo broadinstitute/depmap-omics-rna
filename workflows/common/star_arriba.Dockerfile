@@ -1,4 +1,4 @@
-FROM us-central1-docker.pkg.dev/depmap-omics/terra-images/samtools:production
+FROM us-central1-docker.pkg.dev/depmap-omics/terra-images/samtools_seqtk:production
 
 ENV DEBIAN_FRONTEND=noninteractive
 
