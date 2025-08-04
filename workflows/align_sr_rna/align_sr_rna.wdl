@@ -68,8 +68,7 @@ task align_with_star {
     command <<<
         set -euo pipefail
 
-        if [[ "~{input_file_type}" == "CRAM" ]];
-        then
+        if [[ "~{input_file_type}" == "CRAM" ]]; then
             echo "Converting CRAM to FASTQ"
 
             samtools sort -n \
@@ -83,8 +82,7 @@ task align_with_star {
                 -2 "~{sample_id}.2.fq.gz" -
 
             FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
-        elif [[ "~{input_file_type}" == "BAM" ]];
-        then
+        elif [[ "~{input_file_type}" == "BAM" ]]; then
             echo "Converting BAM to FASTQ"
 
             samtools sort -n \
@@ -96,7 +94,7 @@ task align_with_star {
                 -2 "~{sample_id}.2.fq.gz" -
 
             FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
-        else
+        elif [[ "~{input_file_type}" == "FASTQ" ]]; then
             FASTQS_OPTION="~{sep=' ' fastqs}"
         fi
 
