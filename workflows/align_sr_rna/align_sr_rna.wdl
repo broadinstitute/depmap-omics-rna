@@ -84,10 +84,10 @@ task align_with_star {
             | samtools fastq \
                 -@ ~{n_threads} \
                 --reference "~{ref_fasta}" \
-                -1 "~{sample_id}.1.fq.gz" \
-                -2 "~{sample_id}.2.fq.gz" -
+                -1 "~{sample_id}.1.fq" \
+                -2 "~{sample_id}.2.fq" -
 
-            FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
+            FASTQS_OPTION="~{sample_id}.1.fq ~{sample_id}.2.fq"
         elif [[ "~{input_file_type}" == "BAM" ]]; then
             echo "Converting BAM to FASTQ"
 
@@ -96,12 +96,25 @@ task align_with_star {
                 "~{cram_bam}" \
             | samtools fastq \
                 -@ ~{n_threads} \
-                -1 "~{sample_id}.1.fq.gz" \
-                -2 "~{sample_id}.2.fq.gz" -
+                -1 "~{sample_id}.1.fq" \
+                -2 "~{sample_id}.2.fq" -
 
-            FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
-        else
-            FASTQS_OPTION="~{sep=' ' fastqs}"
+            FASTQS_OPTION="~{sample_id}.1.fq ~{sample_id}.2.fq"
+        elif [[ "~{input_file_type}" == "FASTQ" ]]; then
+            # decompress any gzipped input FASTQs to .fq
+            FASTQS_OPTION=""
+
+            for fq_gz in ~{sep=' ' fastqs}; do
+                if [[ "$fq_gz" == *.gz ]]; then
+                    fq_out="${fq_gz%.gz}"
+                    gunzip -c "$fq_gz" > "$fq_out"
+                    FASTQS_OPTION+=" $fq_out"
+                else
+                    FASTQS_OPTION+=" $fq_gz"
+                fi
+            done
+
+            FASTQS_OPTION="${FASTQS_OPTION# }"  # trim leading space
         fi
 
         if [[ "~{downsample_if_necessary}" == "true" ]]; then
@@ -111,27 +124,16 @@ task align_with_star {
             fi
 
             FIRST_FASTQ=$(echo $FASTQS_OPTION | awk '{print $1}')
-
-            if [[ "$FIRST_FASTQ" == *.gz ]]; then
-                N_READS=$(zcat "$FIRST_FASTQ" | awk 'END {print NR/4}')
-            else
-                N_READS=$(awk 'END {print NR/4}' "$FIRST_FASTQ")
-            fi
+            N_READS=$(awk 'END {print NR/4}' "$FIRST_FASTQ")
 
             if (( $(echo "$N_READS > ~{max_n_reads}" | bc -l) )); then
                 echo "Downsampling $N_READS reads to ~{max_n_reads}"
 
                 for fq in $FASTQS_OPTION; do
-                    if [[ "$fq" == *.gz ]]; then
-                        base="${fq%.gz}"
-                        zcat "$fq" | seqtk sample -2 -s100 - ~{max_n_reads} \
-                            > "${base%.fq}.less.fastq"
-                    else
-                        seqtk sample -2 -s100 "$fq" ~{max_n_reads} \
-                            > "${fq%.fq}.less.fastq"
-                    fi
-
-                    mv "${fq%.fq}.less.fastq" "$fq"
+                    seqtk sample -2 -s100 "$fq" ~{max_n_reads} \
+                        > "${fq%.fq}.less.fastq" \
+                        && rm "$fq" \
+                        && mv "${fq%.fq}.less.fastq" "$fq"
                 done
             else
                 echo "$N_READS <= ~{max_n_reads} reads (no downsampling)"
