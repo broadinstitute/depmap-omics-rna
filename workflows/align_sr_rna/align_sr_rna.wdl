@@ -134,7 +134,7 @@ task align_with_star {
             --outFilterType BySJout \
             --outReadsUnmapped None \
             --outSAMattrRGline ID:GRPundef \
-            --outSAMattributes "~{out_sam_attributes} \
+            --outSAMattributes ~{out_sam_attributes} \
             --outSAMstrandField intronMotif \
             --outSAMtype BAM Unsorted \
             --outSAMunmapped Within \
