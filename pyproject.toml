@@ -18,13 +18,13 @@ dependencies = [
     "pygithub>=2.6.1,<3",
     "pd-flatten>=0.1.1,<0.2",
     "google-cloud-secret-manager>=2.23.1,<3",
-    "nebelung>=2.10.0",
+    "nebelung>=2.10.2",
 ]
 
 [dependency-groups]
 dev = [
     "ruff>=0.12.1,<0.13",
-    "pyright>=1.1.402,<2",
+    "pyright>=1.1.405,<2",
     "fsspec>=2025.5.1,<2026",
     "gcsfs>=2025.5.1,<2026",
     "pandas-stubs>=2.2.3.250527,<3",
