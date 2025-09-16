@@ -42,7 +42,10 @@ task align_with_star {
         File? ref_fasta
         File? ref_fasta_index
         File star_index
+        String out_sam_attributes = "NH HI AS nM NM ch"
 
+        String docker_image = "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba"
+        String docker_image_hash_or_tag = ":production"
         Int cpu = 16
         Int mem_gb = 48
         Int preemptible = 1
@@ -55,9 +58,9 @@ task align_with_star {
             ceil(size(select_first([fastqs, []]), "GiB"))
         else (
             if input_file_type == "CRAM" then
-                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 3)
+                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 8)
             else # BAM
-                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB"))
+                ceil(size(select_first([cram_bam, "/dev/null"]), "GiB") * 2)
         )
     ) + ceil(size(star_index, "GiB") * 5) + 20 + additional_disk_gb
 
@@ -66,8 +69,7 @@ task align_with_star {
     command <<<
         set -euo pipefail
 
-        if [[ "~{input_file_type}" == "CRAM" ]];
-        then
+        if [[ "~{input_file_type}" == "CRAM" ]]; then
             echo "Converting CRAM to FASTQ"
 
             samtools sort -n \
@@ -81,8 +83,7 @@ task align_with_star {
                 -2 "~{sample_id}.2.fq.gz" -
 
             FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
-        elif [[ "~{input_file_type}" == "BAM" ]];
-        then
+        elif [[ "~{input_file_type}" == "BAM" ]]; then
             echo "Converting BAM to FASTQ"
 
             samtools sort -n \
@@ -94,7 +95,7 @@ task align_with_star {
                 -2 "~{sample_id}.2.fq.gz" -
 
             FASTQS_OPTION="~{sample_id}.1.fq.gz ~{sample_id}.2.fq.gz"
-        else
+        elif [[ "~{input_file_type}" == "FASTQ" ]]; then
             FASTQS_OPTION="~{sep=' ' fastqs}"
         fi
 
@@ -133,7 +134,7 @@ task align_with_star {
             --outFilterType BySJout \
             --outReadsUnmapped None \
             --outSAMattrRGline ID:GRPundef \
-            --outSAMattributes NH HI AS nM NM ch \
+            --outSAMattributes "~{out_sam_attributes} \
             --outSAMstrandField intronMotif \
             --outSAMtype BAM Unsorted \
             --outSAMunmapped Within \
@@ -155,7 +156,7 @@ task align_with_star {
     }
 
     runtime {
-        docker: "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba:production"
+        docker: "~{docker_image}~{docker_image_hash_or_tag}"
         memory: mem_gb + " GiB"
         disks: "local-disk " + disk_space + " SSD"
         preemptible: preemptible
