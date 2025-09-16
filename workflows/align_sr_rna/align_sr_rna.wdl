@@ -42,6 +42,7 @@ task align_with_star {
         File? ref_fasta
         File? ref_fasta_index
         File star_index
+        String out_sam_attributes = "NH HI AS nM NM ch"
 
         String docker_image = "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba"
         String docker_image_hash_or_tag = ":production"
@@ -133,7 +134,7 @@ task align_with_star {
             --outFilterType BySJout \
             --outReadsUnmapped None \
             --outSAMattrRGline ID:GRPundef \
-            --outSAMattributes NH HI AS nM NM ch \
+            --outSAMattributes "~{out_sam_attributes} \
             --outSAMstrandField intronMotif \
             --outSAMtype BAM Unsorted \
             --outSAMunmapped Within \
