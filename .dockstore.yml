@@ -5,7 +5,7 @@ workflows:
     readMePath: /workflows/align_sr_rna/README.md
     primaryDescriptorPath: /workflows/align_sr_rna/align_sr_rna.wdl
     testParameterFiles:
-      - /workflows/align_sr_rna/align_sr_rna.json
+      - /workflows/align_sr_rna/align_sr_rna_inputs.json
     filters:
       branches:
         - main
