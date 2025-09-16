@@ -42,7 +42,45 @@ task align_with_star {
         File? ref_fasta
         File? ref_fasta_index
         File star_index
+        String align_insertion_flush = "Right"
+        Int align_intron_max = 100000
+        Int align_mates_gap_max = 100000
+        Int align_sjdb_overhang_min = 10
+        String align_sj_stitch_mismatch_nmax = "5 -1 5 5"
+        Int align_spliced_mate_map_lmin = 30
+        Int align_spliced_mate_map_lmin_over_lmate = 0
+        Int chim_junction_overhang_min = 8
+        Int chim_multimap_nmax = 20
+        Int chim_multimap_score_range = 3
+        Int chim_nonchim_score_drop_min = 10
+        Int chim_out_junction_format = 1
+        String chim_out_type = "Junctions WithinBAM"
+        Int chim_score_junction_non_gtag = -4
+        Int chim_segment_min = 12
+        String genome_dir = "star_index"
+        String genome_load = "NoSharedMemory"
+        Int limit_sjdb_insert_nsj = 1200000
+        String out_filter_intron_motifs = "None"
+        Int out_filter_match_nmin = 0
+        Float out_filter_match_nmin_over_lread = 0.33
+        Int out_filter_mismatch_nmax = 999
+        Float out_filter_mismatch_nover_lmax = 0.1
+        Int out_filter_multimap_nmax = 20
+        Float out_filter_score_min_over_lread = 0.33
+        String out_filter_type = "BySJout"
+        String out_reads_unmapped = "None"
+        String out_sam_attr_rg_line = "ID:GRPundef"
         String out_sam_attributes = "NH HI AS nM NM ch"
+        String out_sam_strand_field = "intronMotif"
+        String out_sam_type = "BAM Unsorted"
+        String out_sam_unmapped = "Within"
+        Float pe_overlap_mmp = 0.1
+        Int pe_overlap_nbases_min = 12
+        String quant_mode = "TranscriptomeSAM GeneCounts"
+        String read_files_command = "gunzip -c"
+        String twopass_mode = "None"
+        Int win_anchor_multimap_nmax = 50
+        String extra_star_args = ""
 
         String docker_image = "us-central1-docker.pkg.dev/depmap-omics/terra-images/star_arriba"
         String docker_image_hash_or_tag = ":production"
@@ -105,47 +143,48 @@ task align_with_star {
 
         echo "Running STAR"
         STAR \
-            --alignInsertionFlush Right \
-            --alignIntronMax 100000 \
-            --alignMatesGapMax 100000 \
-            --alignSJDBoverhangMin 10 \
-            --alignSJstitchMismatchNmax 5 -1 5 5 \
-            --alignSplicedMateMapLmin 30 \
-            --alignSplicedMateMapLminOverLmate 0 \
-            --chimJunctionOverhangMin 8 \
-            --chimMultimapNmax 20 \
-            --chimMultimapScoreRange 3 \
-            --chimNonchimScoreDropMin 10 \
-            --chimOutJunctionFormat 1 \
-            --chimOutType Junctions WithinBAM \
-            --chimScoreJunctionNonGTAG -4 \
-            --chimSegmentMin 12 \
-            --genomeDir star_index \
-            --genomeLoad NoSharedMemory \
-            --limitSjdbInsertNsj 1200000 \
-            --outFileNamePrefix "~{sample_id}." \
-            --outFilterIntronMotifs None \
-            --outFilterMatchNmin 0 \
-            --outFilterMatchNminOverLread 0.33 \
-            --outFilterMismatchNmax 999 \
-            --outFilterMismatchNoverLmax 0.1 \
-            --outFilterMultimapNmax 20 \
-            --outFilterScoreMinOverLread 0.33 \
-            --outFilterType BySJout \
-            --outReadsUnmapped None \
-            --outSAMattrRGline ID:GRPundef \
+            --alignInsertionFlush "~{align_insertion_flush}" \
+            --alignIntronMax ~{align_intron_max} \
+            --alignMatesGapMax ~{align_mates_gap_max} \
+            --alignSJDBoverhangMin ~{align_sjdb_overhang_min} \
+            --alignSJstitchMismatchNmax "~{align_sj_stitch_mismatch_nmax}" \
+            --alignSplicedMateMapLmin ~{align_spliced_mate_map_lmin} \
+            --alignSplicedMateMapLminOverLmate ~{align_spliced_mate_map_lmin_over_lmate} \
+            --chimJunctionOverhangMin ~{chim_junction_overhang_min} \
+            --chimMultimapNmax ~{chim_multimap_nmax} \
+            --chimMultimapScoreRange ~{chim_multimap_score_range} \
+            --chimNonchimScoreDropMin ~{chim_nonchim_score_drop_min} \
+            --chimOutJunctionFormat ~{chim_out_junction_format} \
+            --chimOutType "~{chim_out_type}" \
+            --chimScoreJunctionNonGTAG ~{chim_out_type} \
+            --chimSegmentMin ~{chim_segment_min} \
+            --genomeDir "~{genome_dir}" \
+            --genomeLoad "~{genome_load}" \
+            --limitSjdbInsertNsj ~{limit_sjdb_insert_nsj} \
+            --outFilterIntronMotifs "~{out_filter_intron_motifs}" \
+            --outFilterMatchNmin ~{out_filter_match_nmin} \
+            --outFilterMatchNminOverLread ~{out_filter_match_nmin_over_lread} \
+            --outFilterMismatchNmax ~{out_filter_mismatch_nmax} \
+            --outFilterMismatchNoverLmax ~{out_filter_mismatch_nover_lmax} \
+            --outFilterMultimapNmax ~{out_filter_multimap_nmax} \
+            --outFilterScoreMinOverLread ~{out_filter_score_min_over_lread} \
+            --outFilterType "~{out_filter_type}" \
+            --outReadsUnmapped "~{out_reads_unmapped}" \
+            --outSAMattrRGline "~{out_sam_attr_rg_line}" \
             --outSAMattributes "~{out_sam_attributes} \
-            --outSAMstrandField intronMotif \
-            --outSAMtype BAM Unsorted \
-            --outSAMunmapped Within \
-            --peOverlapMMp 0.1 \
-            --peOverlapNbasesMin 12 \
-            --quantMode TranscriptomeSAM GeneCounts \
-            --readFilesCommand gunzip -c \
+            --outSAMstrandField "~{out_sam_strand_field}" \
+            --outSAMtype "~{out_sam_type}" \
+            --outSAMunmapped "~{out_sam_unmapped}" \
+            --peOverlapMMp ~{pe_overlap_mmp} \
+            --peOverlapNbasesMin ~{pe_overlap_nbases_min} \
+            --quantMode "~{quant_mode}" \
+            --readFilesCommand "~{read_files_command}" \
             --readFilesIn $FASTQS_OPTION \
-            --runThreadN ~{n_threads} \
-            --twopassMode None \
-            --winAnchorMultimapNmax 50
+            --runThreadN "~{n_threads} \
+            --twopassMode "~{twopass_mode}" \
+            --winAnchorMultimapNmax ~{win_anchor_multimap_nmax} \
+            "~{extra_star_args}"
+
     >>>
 
     output {
