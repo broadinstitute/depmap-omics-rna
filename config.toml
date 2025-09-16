@@ -18,6 +18,7 @@ method_config_name = "align_sr_rna"
 method_synopsis = "Align a single RNA sample using STAR"
 workflow_wdl_path = "./workflows/align_sr_rna/align_sr_rna.wdl"
 method_config_json_path = "./workflows/align_sr_rna/align_sr_rna.json"
+workflow_inputs_json_path = "./workflows/align_sr_rna/align_sr_rna_inputs.json"
 
 [terra.call_sr_rna_fusions]
 method_namespace = "cds-pipelines"
@@ -27,6 +28,7 @@ method_config_name = "call_sr_rna_fusions"
 method_synopsis = "Call short read RNA fusions with Arriba"
 workflow_wdl_path = "./workflows/call_sr_rna_fusions/call_sr_rna_fusions.wdl"
 method_config_json_path = "./workflows/call_sr_rna_fusions/call_sr_rna_fusions.json"
+workflow_inputs_json_path = "./workflows/call_sr_rna_fusions/call_sr_rna_fusions_inputs.json"
 
 [terra.quantify_sr_rna]
 method_namespace = "cds-pipelines"
@@ -36,6 +38,7 @@ method_config_name = "quantify_sr_rna"
 method_synopsis = "Quantify short read RNA fusions with Salmon"
 workflow_wdl_path = "./workflows/quantify_sr_rna/quantify_sr_rna.wdl"
 method_config_json_path = "./workflows/quantify_sr_rna/quantify_sr_rna.json"
+workflow_inputs_json_path = "./workflows/quantify_sr_rna/quantify_sr_rna_inputs.json"
 
 [terra.process_sr_rna]
 method_namespace = "cds-pipelines"
@@ -45,6 +48,7 @@ method_config_name = "process_sr_rna"
 method_synopsis = "Run alignment, fusion calling, and quantification workflows"
 workflow_wdl_path = "./workflows/process_sr_rna/process_sr_rna.wdl"
 method_config_json_path = "./workflows/process_sr_rna/process_sr_rna.json"
+workflow_inputs_json_path = "./workflows/process_sr_rna/process_sr_rna_inputs.json"
 
 [ref.hg19]
 ref_fasta = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta"

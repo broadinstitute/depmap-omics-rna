@@ -2,8 +2,6 @@
   "deleted": false,
   "inputs": {
     "call_sr_rna_fusions.analysis_ready_bam": "this.analysis_ready_bam",
-    "call_sr_rna_fusions.gtf": "\"gs://ccleparams/rna/gencode.v38_with_viral_corrected.gtf\"",
-    "call_sr_rna_fusions.ref_fasta": "\"gs://ccleparams/rna/Homo_sapiens_assembly38_with_viral.fa\"",
     "call_sr_rna_fusions.sample_id": "this.sample_id"
   },
   "methodConfigVersion": 1,
