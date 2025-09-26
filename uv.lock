@@ -324,7 +324,7 @@ requires-dist = [
     { name = "google-cloud-logging", specifier = ">=3.11.4,<4" },
     { name = "google-cloud-secret-manager", specifier = ">=2.23.1,<3" },
     { name = "google-cloud-storage", specifier = ">=2.19.0,<3" },
-    { name = "nebelung", specifier = ">=2.10.2" },
+    { name = "nebelung", specifier = ">=2.11.0" },
     { name = "pandas", specifier = ">=2.2.3,<3" },
     { name = "pandera", extras = ["strategies"], specifier = ">=0.20.4,<0.21" },
     { name = "pd-flatten", specifier = ">=0.1.1,<0.2" },
@@ -956,7 +956,7 @@ wheels = [
 
 [[package]]
 name = "nebelung"
-version = "2.10.2"
+version = "2.11.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "firecloud-api-cds" },
@@ -966,9 +966,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pygithub" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/95/ad/0759f6f4b4b9274a0eed0192b6d71a61da18636d3e65273d03b0a72a5db5/nebelung-2.10.2.tar.gz", hash = "sha256:66d6df6cd30b8af4d4d52b01b14a0c11a40460414cfd6fb26bc23cb6aa79e1f2", size = 19822 }
+sdist = { url = "https://files.pythonhosted.org/packages/29/ca/9d2c4b7fe2d7184a060b9db656f7027466f5f946c11949be720749cf7bba/nebelung-2.11.0.tar.gz", hash = "sha256:57fc8cdc07e2ef48fe8378a18fa326bf8d5ad624189f46fed71e97e1e7813298", size = 19937 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/63/3e/d20d7e8eea7d153c3daa313bcd48e908f729becdc4860833f0074608db96/nebelung-2.10.2-py3-none-any.whl", hash = "sha256:101d9cec7763ee52bab64c373b1e75ef35eedc4b3dfb1f1d7a18477102378d5f", size = 18763 },
+    { url = "https://files.pythonhosted.org/packages/67/3e/dd4c9311f3d43da4a74abee5c90107d703379a8e57dc94f24889fb43b763/nebelung-2.11.0-py3-none-any.whl", hash = "sha256:820dc8e325cdabb5d13ee8725da2456d54ee997d0419aea64f4962d1d2a5e2f9", size = 18878 },
 ]
 
 [[package]]
@@ -1360,11 +1360,11 @@ wheels = [
 
 [[package]]
 name = "pyparsing"
-version = "3.2.4"
+version = "3.2.5"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/98/c9/b4594e6a81371dfa9eb7a2c110ad682acf985d96115ae8b25a1d63b4bf3b/pyparsing-3.2.4.tar.gz", hash = "sha256:fff89494f45559d0f2ce46613b419f632bbb6afbdaed49696d322bcf98a58e99", size = 1098809 }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/a5/181488fc2b9d093e3972d2a472855aae8a03f000592dbfce716a512b3359/pyparsing-3.2.5.tar.gz", hash = "sha256:2df8d5b7b2802ef88e8d016a2eb9c7aeaa923529cd251ed0fe4608275d4105b6", size = 1099274 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/b8/fbab973592e23ae313042d450fc26fa24282ebffba21ba373786e1ce63b4/pyparsing-3.2.4-py3-none-any.whl", hash = "sha256:91d0fcde680d42cd031daf3a6ba20da3107e08a75de50da58360e7d94ab24d36", size = 113869 },
+    { url = "https://files.pythonhosted.org/packages/10/5e/1aa9a93198c6b64513c9d7752de7422c06402de6600a8767da1524f9570b/pyparsing-3.2.5-py3-none-any.whl", hash = "sha256:e38a4f02064cf41fe6593d328d0512495ad1f3d8a91c4f73fc401b3079a59a5e", size = 113890 },
 ]
 
 [[package]]
