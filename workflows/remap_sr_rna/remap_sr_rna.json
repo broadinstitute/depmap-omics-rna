@@ -1,0 +1,9 @@
+{
+  "sr_remap_rna.bam": "/path/to/input.bam",
+  "sr_remap_rna.bed": "/path/to/regions.bed",
+  "sr_remap_rna.ref": "/path/to/reference_with_decoys.fasta",
+  "sr_remap_rna.out_prefix": "sample1",
+  "sr_remap_rna.threads": 8,
+  "sr_remap_rna.star_index_dir": "/path/to/STAR_index",
+  "sr_remap_rna.old_ref": "/path/to/original_ref.fasta"
+}
