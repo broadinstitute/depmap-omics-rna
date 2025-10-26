@@ -3,7 +3,6 @@ version 1.0
 workflow sr_remap_rna {
   input {
     File bam_or_cram
-    File bam_or_cram_index
     File bed
     String out_prefix
     Int threads = 1
@@ -15,7 +14,6 @@ workflow sr_remap_rna {
   call filter_reads {
     input:
       bam_or_cram = bam_or_cram,
-      bam_or_cram_index = bam_or_cram_index,
       bed = bed,
       out_prefix = out_prefix,
       threads = threads,
@@ -26,7 +24,6 @@ workflow sr_remap_rna {
   call extract_reads {
     input:
       bam_or_cram = bam_or_cram,
-      bam_or_cram_index = bam_or_cram_index,
       bed = bed,
       out_prefix = out_prefix,
       threads = threads, 
@@ -64,7 +61,6 @@ workflow sr_remap_rna {
 task filter_reads {
   input {
     File bam_or_cram
-    File bam_or_cram_index
     File bed
     String out_prefix
     Int threads
@@ -112,7 +108,6 @@ task filter_reads {
 task extract_reads {
   input {
     File bam_or_cram
-    File bam_or_cram_index
     File bed
     String out_prefix
     Int threads
