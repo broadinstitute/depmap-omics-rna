@@ -7,7 +7,8 @@ workflow sr_remap_rna {
     String out_prefix
     Int threads = 1
     File? old_ref
-    String star_index_dir
+    String star_index
+    String genome_dir
   }
 
   # 1️⃣ Filter reads by BED
@@ -37,7 +38,8 @@ workflow sr_remap_rna {
       r2 = extract_reads.r2_fastq,
       out_prefix = out_prefix,
       threads = threads,
-      star_index_dir = star_index_dir
+      star_index = star_index,
+      genome_dir = genome_dir
   }
 
   # 4️⃣ Merge filtered (original) and remapped BAMs
@@ -154,7 +156,8 @@ task remap_reads {
     File r2
     String out_prefix
     Int threads
-    String star_index_dir
+    String star_index
+    String genome_dir
     Int memory
     Int disk_size
   }
@@ -162,12 +165,16 @@ task remap_reads {
   command <<<
     set -euo pipefail
 
+    echo "Extracting STAR index"
+    mkdir -p "star_index"
+    tar -C "star_index" -xzf "~{star_index}" --strip-components=1
+
     echo "Remapping reads using STAR..."
     STAR \
       --runMode alignReads \
       --runThreadN ~{threads} \
       --readFilesCommand zcat \
-      --genomeDir ~{star_index_dir} \
+      --genomeDir ~{genome_dir} \
       --readFilesIn ~{r1} ~{r2} \
       --outSAMtype BAM SortedByCoordinate \
       --outFileNamePrefix ~{out_prefix}_remapped_
