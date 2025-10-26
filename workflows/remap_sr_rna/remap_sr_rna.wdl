@@ -81,9 +81,11 @@ task filter_reads {
         echo "Error: CRAM input requires old reference."
         exit 1
       fi
-      samtools view -L "~{bed}" -U "~{out_prefix}_filtered_original.bam" -b --reference "~{old_ref}" -o "~{out_prefix}_filtered_remapped.bam" "~{bam_or_cram}" 
+      samtools view -L "~{bed}" -U "~{out_prefix}_filtered_original.bam" -b --reference "~{old_ref}" -o "~{out_prefix}_filtered_remapped.bam" "~{bam_or_cram}"
+      # TODO: Filter transcriptome BAM (?) 
     else
       samtools view -L "~{bed}" -U "~{out_prefix}_filtered_original.bam" -b -o "~{out_prefix}_filtered_remapped.bam" "~{bam_or_cram}" 
+      # TODO: Filter transcriptome BAM (?)
     fi
 
     samtools index "~{out_prefix}_filtered_original.bam"
@@ -121,14 +123,14 @@ task extract_reads {
   command <<<
     set -euo pipefail
 
-    samtools view -hb -L ${bed} -o ~{out_prefix}_extracted_reads.bam ${bam_or_cram}
+    samtools view -hb -L "~{bed}" -o "~{out_prefix}_extracted_reads.bam" "~{bam_or_cram}"
 
     echo "Extracting FASTQs from ~{out_prefix}_extracted_reads.bam..."
     samtools fastq \
-      -@ ~{threads} \
-      ~{out_prefix}_extracted_reads.bam \
-      -1 ~{out_prefix}.R1.fastq.gz \
-      -2 ~{out_prefix}.R2.fastq.gz \
+      -@ "~{threads}" \
+      "~{out_prefix}_extracted_reads.bam" \
+      -1 "~{out_prefix}.R1.fastq.gz" \
+      -2 "~{out_prefix}.R2.fastq.gz" \
       -0 /dev/null -s /dev/null -n
   >>>
 
@@ -174,18 +176,20 @@ task remap_reads {
       --runMode alignReads \
       --runThreadN ~{threads} \
       --readFilesCommand zcat \
-      --genomeDir ~{genome_dir} \
-      --readFilesIn ~{r1} ~{r2} \
-      --outSAMtype BAM SortedByCoordinate \
-      --outFileNamePrefix ~{out_prefix}_remapped_
+      --genomeDir "~{genome_dir}" \
+      --readFilesIn "~{r1}" "~{r2}" \
+      --outSAMtype "BAM Unsorted" \
+      --quantMode "TranscriptomeSAM GeneCounts" \
+      # --outFileNamePrefix "~{out_prefix}_remapped_"
 
-    samtools index ~{out_prefix}_remapped_Aligned.sortedByCoord.out.bam
+    # samtools index "~{out_prefix}_remapped_Aligned.out.bam"
 
   >>>
 
   output {
-    File remapped_bam = "~{out_prefix}_remapped_Aligned.sortedByCoord.out.bam"
-    File remapped_bai = "~{out_prefix}_remapped_Aligned.sortedByCoord.out.bam.bai"
+    File remapped_bam = "~{out_prefix}_remapped_Aligned.out.bam"
+    # File remapped_bai = "~{out_prefix}_remapped_Aligned.out.bam.bai"
+    File remapped_transcriptome_bam = "~{out_prefix}_remapped_Aligned.toTranscriptome.out.bam"
   }
 
   runtime {
@@ -214,9 +218,12 @@ task merge_reads {
     set -euo pipefail
 
     echo "Merging ~{filtered_bam} and ~{remapped_bam}..."
-    samtools merge -@ ~{threads} -f ~{out_prefix}_merged.bam ~{filtered_bam} ~{remapped_bam}
-    samtools sort -@ ~{threads} -o ~{out_prefix}_merged.sorted.bam ~{out_prefix}_merged.bam
-    samtools index ~{out_prefix}_merged.sorted.bam
+    samtools merge -@ ~{threads} "~{out_prefix}_merged.bam" "~{filtered_bam}" "~{remapped_bam}"
+    samtools sort -@ ~{threads} -o "~{out_prefix}_merged.sorted.bam" "~{out_prefix}_merged.bam"
+    samtools index "~{out_prefix}_merged.sorted.bam"
+
+    # Add to FixItFelix - TODO: Merge filtered transcriptome BAM to remapped transcriptome BAM
+    samtools merge -@ ~{threads} "~{out_prefix}_merged.toTranscriptome.bam" "~{filtered_transcriptome_bam}" "~{remapped_transcriptome_bam}"
   >>>
 
   output {
