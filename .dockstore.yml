@@ -1,6 +1,16 @@
 version: 1.2
 workflows:
   - subclass: WDL
+    name: remap_sr_rna
+    readMePath: /workflows/remap_sr_rna/README.md
+    primaryDescriptorPath: /workflows/remap_sr_rna/remap_sr_rna.wdl
+    testParameterFiles:
+      - /workflows/remap_sr_rna/remap_sr_rna_inputs.json
+    filters:
+      branches:
+        - giab-dev
+    publish: True
+  - subclass: WDL
     name: align_sr_rna
     readMePath: /workflows/align_sr_rna/README.md
     primaryDescriptorPath: /workflows/align_sr_rna/align_sr_rna.wdl
