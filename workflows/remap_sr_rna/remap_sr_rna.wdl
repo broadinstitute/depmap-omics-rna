@@ -161,6 +161,8 @@ task remap_reads {
     String out_prefix
     Int threads
     String star_index_dir
+    Int memory
+    Int disk_size
   }
 
   command <<<
@@ -203,6 +205,8 @@ task merge_reads {
     File remapped_bam
     String out_prefix
     Int threads
+    Int memory
+    Int disk_size
   }
 
   command <<<
