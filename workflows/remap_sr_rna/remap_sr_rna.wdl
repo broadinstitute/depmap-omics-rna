@@ -5,7 +5,6 @@ workflow sr_remap_rna {
     File bam_or_cram
     File bam_or_cram_index
     File bed
-    File ref
     String out_prefix
     Int threads = 1
     File? old_ref
