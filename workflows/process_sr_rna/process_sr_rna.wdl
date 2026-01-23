@@ -18,6 +18,9 @@ workflow process_sr_rna {
         File gtf
         File targets
         Boolean stranded
+
+        Boolean call_fusions = true
+        Boolean quantify = true
     }
 
     call align_sr_rna.align_sr_rna {
@@ -32,31 +35,39 @@ workflow process_sr_rna {
             star_index = star_index
     }
 
-    call call_sr_rna_fusions.call_sr_rna_fusions {
-        input:
-            sample_id = sample_id,
-            analysis_ready_bam = align_sr_rna.analysis_ready_bam,
-            ref_fasta = ref_fasta,
-            gtf = gtf
+    if (call_fusions) {
+        call call_sr_rna_fusions.call_sr_rna_fusions {
+            input:
+                sample_id = sample_id,
+                analysis_ready_bam = align_sr_rna.analysis_ready_bam,
+                ref_fasta = ref_fasta,
+                gtf = gtf
+        }
     }
 
-    call quantify_sr_rna.quantify_sr_rna {
-        input:
-            sample_id = sample_id,
-            transcriptome_bam = align_sr_rna.transcriptome_bam,
-            gtf = gtf,
-            targets = targets,
-            stranded = stranded
+    if (quantify) {
+        call quantify_sr_rna.quantify_sr_rna {
+            input:
+                sample_id = sample_id,
+                transcriptome_bam = align_sr_rna.transcriptome_bam,
+                gtf = gtf,
+                targets = targets,
+                stranded = stranded
+        }
     }
 
     output {
         File reads_per_gene = align_sr_rna.reads_per_gene
         File junctions = align_sr_rna.junctions
-        File fusions = call_sr_rna_fusions.fusions
-        File fusions_discarded = call_sr_rna_fusions.fusions_discarded
+        File? fusions = call_sr_rna_fusions.fusions
+        File? fusions_discarded = call_sr_rna_fusions.fusions_discarded
         File? quant_transcripts_auto = quantify_sr_rna.quant_transcripts_auto
         File? quant_genes_auto = quantify_sr_rna.quant_genes_auto
-        File quant_transcripts_iu = quantify_sr_rna.quant_transcripts_iu
-        File quant_genes_iu = quantify_sr_rna.quant_genes_iu
+        File? quant_transcripts_iu = quantify_sr_rna.quant_transcripts_iu
+        File? quant_genes_iu = quantify_sr_rna.quant_genes_iu
+    }
+
+    meta {
+        allowNestedInputs: true
     }
 }
