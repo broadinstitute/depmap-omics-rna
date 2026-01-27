@@ -263,12 +263,15 @@ task align_with_star {
             ~{"--twopassMode " + twopass_mode} \
             ~{"--winAnchorMultimapNmax " + win_anchor_multimap_nmax} \
             ~{extra_star_args}
+
+        gzip -c "~{sample_id}.SJ.out.tab" > "~{sample_id}.junctions.tsv.gz"
+        gzip -c "~{sample_id}.ReadsPerGene.out.tab" > "~{sample_id}.reads_per_gene.tsv.gz"
     >>>
 
     output {
         File analysis_ready_bam = "~{sample_id}.Aligned.out.bam"
-        File junctions = "~{sample_id}.SJ.out.tab"
-        File reads_per_gene = "~{sample_id}.ReadsPerGene.out.tab"
+        File junctions = "~{sample_id}.junctions.tsv.gz"
+        File reads_per_gene = "~{sample_id}.reads_per_gene.tsv.gz"
         File transcriptome_bam = "~{sample_id}.Aligned.toTranscriptome.out.bam"
     }
 
