@@ -50,6 +50,16 @@ workflow_wdl_path = "./workflows/process_sr_rna/process_sr_rna.wdl"
 method_config_json_path = "./workflows/process_sr_rna/process_sr_rna.json"
 workflow_inputs_json_path = "./workflows/process_sr_rna/process_sr_rna_inputs.json"
 
+[terra.gzip_tsv]
+method_namespace = "cds-pipelines"
+method_name = "gzip_tsv"
+method_config_namespace = "cds-pipelines"
+method_config_name = "gzip_tsv"
+method_synopsis = "gzip_tsv"
+workflow_wdl_path = "./workflows/gzip_tsv/gzip_tsv.wdl"
+method_config_json_path = "./workflows/gzip_tsv/gzip_tsv.json"
+workflow_inputs_json_path = "./workflows/gzip_tsv/gzip_tsv_inputs.json"
+
 [ref.hg19]
 ref_fasta = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta"
 ref_fasta_index = "gs://ccleparams/reference/hg19/Homo_sapiens_assembly19.fasta.fai"
