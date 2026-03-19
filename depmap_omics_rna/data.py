@@ -104,8 +104,6 @@ def refresh_terra_samples(
     # validate types
     samples = type_data_frame(samples, TerraSample, remove_unknown_cols=True)
 
-    sample_ids = samples.pop("sample_id")
-    samples.insert(0, "entity:sample_id", sample_ids)
     terra_workspace.upload_entities(df=samples)
 
 
