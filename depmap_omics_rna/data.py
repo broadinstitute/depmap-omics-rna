@@ -104,17 +104,6 @@ def refresh_terra_samples(
     # validate types
     samples = type_data_frame(samples, TerraSample, remove_unknown_cols=True)
 
-    # delete obsolete samples (e.g. ones that have been blacklisted since the last sync)
-    terra_samples = terra_workspace.get_entities("sample")
-
-    if len(terra_samples) > 0:
-        terra_workspace.delete_entities(
-            entity_type="sample",
-            entity_ids=set(terra_samples["sample_id"]).difference(
-                set(samples["sample_id"])
-            ),
-        )
-
     sample_ids = samples.pop("sample_id")
     samples.insert(0, "entity:sample_id", sample_ids)
     terra_workspace.upload_entities(df=samples)
